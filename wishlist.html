@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma Liste de Souhaits — KLIKOO Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --pr:#ff8716;--prd:#e06500;--prl:#fff4ea;--prs:rgba(255,135,22,.12);
+  --dk:#0f0f12;--dk2:#1c1c22;--mid:#4a4a5a;
+  --gr:#7a7a8c;--bd:#e8e8f0;--li:#f5f5f8;--wh:#fff;
+  --green:#10b981;--red:#ef4444;--blue:#3b82f6;
+  --sh1:0 2px 8px rgba(0,0,0,.06);
+  --sh2:0 8px 28px rgba(0,0,0,.10);
+  --sh3:0 20px 60px rgba(0,0,0,.16);
+  --r:14px;--tr:all .26s cubic-bezier(.4,0,.2,1)
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--dk);background:var(--li);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+img{max-width:100%;height:auto;display:block}
+.container{max-width:1260px;margin:0 auto;padding:0 24px}
+
+/* ── ANNOUNCE BAR ── */
+.ann-bar{background:linear-gradient(90deg,#0f0f12 0%,#1c1c22 50%,#0f0f12 100%);padding:9px 0;overflow:hidden}
+.ann-scroll{display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
+.ann-item{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:#b0b0c0;white-space:nowrap}
+.ann-item i{color:var(--pr);font-size:11px}
+.ann-item b{color:var(--wh)}
+.ann-item a{color:#fbbf24;font-weight:700}
+
+/* ── HEADER ── */
+.site-header{background:var(--wh);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:1000;transition:box-shadow .3s}
+.site-header.scrolled{box-shadow:0 4px 20px rgba(0,0,0,.10)}
+.h-top{padding:14px 0}
+.h-top-grid{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px}
+.h-logo{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.h-logo-text{display:flex;flex-direction:column;line-height:1}
+.h-logo-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:900;color:var(--dk);letter-spacing:-.5px}
+.h-logo-tagline{font-size:10px;font-weight:600;color:var(--gr);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.h-srch-wrap{max-width:580px;width:100%;justify-self:center}
+.h-srch{display:flex;align-items:center;background:var(--li);border:2px solid var(--bd);border-radius:50px;overflow:hidden;transition:var(--tr)}
+.h-srch:focus-within{border-color:var(--pr);background:var(--wh);box-shadow:0 0 0 4px var(--prs)}
+.h-srch input{flex:1;border:none;background:transparent;padding:12px 20px;font-size:14px;font-family:inherit;color:var(--dk);outline:none}
+.h-srch input::placeholder{color:#aaa}
+.h-srch-btn{background:var(--pr);color:var(--wh);padding:12px 22px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .2s;white-space:nowrap;border:none}
+.h-srch-btn:hover{background:var(--prd)}
+.h-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.h-icon-btn{position:relative;width:44px;height:44px;background:var(--li);border:1.5px solid var(--bd);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--dk);font-size:17px;transition:var(--tr);cursor:pointer}
+.h-icon-btn:hover{background:var(--prl);border-color:rgba(255,135,22,.3);color:var(--pr);transform:translateY(-1px)}
+.h-icon-btn.active{background:var(--prl);border-color:var(--pr);color:var(--pr)}
+.h-badge{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;font-size:9px;font-weight:800;padding:2px 5px;border-radius:12px;min-width:17px;text-align:center;line-height:1.3;display:none}
+.h-badge.show{display:block}
+.h-auth{display:flex;gap:8px;margin-left:4px}
+.btn-login{display:flex;align-items:center;gap:7px;padding:10px 18px;border:2px solid var(--bd);border-radius:10px;font-size:13px;font-weight:600;color:var(--dk);background:var(--wh);transition:var(--tr);white-space:nowrap}
+.btn-login:hover{border-color:var(--pr);color:var(--pr);background:var(--prl)}
+.btn-signup{display:flex;align-items:center;gap:7px;padding:10px 18px;background:linear-gradient(135deg,var(--pr),var(--prd));color:#fff;border-radius:10px;font-size:13px;font-weight:700;transition:var(--tr);white-space:nowrap;box-shadow:0 4px 14px rgba(255,135,22,.3)}
+.btn-signup:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,135,22,.4)}
+.user-menu{position:relative}
+.user-btn{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--prl);border:2px solid rgba(255,135,22,.3);border-radius:10px;font-size:13px;font-weight:600;color:var(--pr);cursor:pointer;transition:var(--tr)}
+.user-btn:hover{background:var(--pr);color:#fff;border-color:var(--pr)}
+.user-btn i{font-size:16px}
+.user-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;box-shadow:var(--sh2);min-width:200px;display:none;z-index:100}
+.user-dropdown.show{display:block}
+.user-dropdown-header{padding:16px;border-bottom:1px solid var(--bd)}
+.user-dropdown-header strong{display:block;color:var(--dk);font-size:14px;margin-bottom:4px}
+.user-dropdown-header span{color:var(--gr);font-size:12px}
+.user-dropdown-item{display:flex;align-items:center;gap:10px;padding:12px 16px;color:var(--dk);font-size:13px;font-weight:500;cursor:pointer;transition:var(--tr)}
+.user-dropdown-item:hover{background:var(--li);color:var(--pr)}
+.user-dropdown-item i{width:20px;color:var(--pr)}
+.user-dropdown-divider{height:1px;background:var(--bd);margin:4px 0}
+.hbg{display:none;flex-direction:column;gap:5px;padding:10px;background:var(--li);border:1.5px solid var(--bd);border-radius:10px}
+.hbg span{width:22px;height:2.5px;background:var(--dk);border-radius:2px;display:block;transition:var(--tr)}
+.hbg:hover span{background:var(--pr)}
+.h-nav{border-top:1px solid var(--bd)}
+.nav-inner{display:flex;align-items:center}
+.nav-ul{display:flex;list-style:none}
+.nav-ul li a{display:flex;align-items:center;gap:6px;padding:13px 18px;font-size:14px;font-weight:600;color:var(--gr);position:relative;transition:color .22s}
+.nav-ul li a::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%) scaleX(0);width:60%;height:3px;background:var(--pr);border-radius:2px 2px 0 0;transition:transform .22s}
+.nav-ul li a:hover,.nav-ul li.act a{color:var(--pr)}
+.nav-ul li.act a::after,.nav-ul li a:hover::after{transform:translateX(-50%) scaleX(1)}
+.mob-menu{display:none;background:var(--wh);border-top:1px solid var(--bd);padding:16px 24px}
+.mob-menu.open{display:block}
+.mob-ul{list-style:none;flex-direction:column;gap:4px;margin-bottom:14px;display:flex}
+.mob-ul li a{display:flex;align-items:center;gap:10px;padding:12px 15px;border-radius:9px;font-size:14px;font-weight:600;color:var(--gr);transition:var(--tr)}
+.mob-ul li a:hover,.mob-ul li.act a{color:var(--pr);background:var(--prl)}
+.mob-auth-row{display:flex;gap:10px}
+.mob-auth-row a,.mob-auth-row button{flex:1;justify-content:center}
+
+/* ── PAGE HEADER ── */
+.page-header{background:linear-gradient(135deg,#0f0f12 0%,#1c1c22 50%,#3d1800 100%);padding:60px 0;position:relative;overflow:hidden}
+.page-header::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:50px 50px;pointer-events:none}
+.page-header-content{position:relative;z-index:2;text-align:center}
+.page-header h1{font-family:'Syne',sans-serif;font-size:42px;font-weight:900;color:#fff;margin-bottom:12px;letter-spacing:-1px}
+.page-header h1 i{color:var(--pr);margin-right:12px}
+.page-header p{font-size:16px;color:rgba(255,255,255,.7);max-width:600px;margin:0 auto}
+.breadcrumb{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;font-size:14px}
+.breadcrumb a{color:rgba(255,255,255,.6);transition:color .2s}
+.breadcrumb a:hover{color:var(--pr)}
+.breadcrumb span{color:rgba(255,255,255,.4)}
+.breadcrumb strong{color:#fff}
+
+/* ── WISHLIST SECTION ── */
+.wishlist-section{padding:80px 0}
+.wish-toolbar{background:var(--wh);border:1.5px solid var(--bd);border-radius:var(--r);padding:20px;display:flex;align-items:center;justify-content:space-between;margin-bottom:30px;flex-wrap:wrap;gap:16px}
+.wish-count{font-size:15px;font-weight:700;color:var(--dk)}
+.wish-count span{color:var(--pr)}
+.wish-actions{display:flex;gap:10px}
+.wish-btn{padding:10px 20px;border:2px solid var(--bd);border-radius:10px;font-size:13px;font-weight:600;color:var(--dk);background:var(--wh);transition:var(--tr);display:flex;align-items:center;gap:8px}
+.wish-btn:hover{border-color:var(--pr);color:var(--pr);background:var(--prl)}
+.wish-btn.danger{border-color:#ffcccc;color:var(--red)}
+.wish-btn.danger:hover{border-color:var(--red);background:#fff5f5}
+
+/* ── WISHLIST GRID ── */
+.wish-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.wish-empty{grid-column:1/-1;text-align:center;padding:100px 20px;background:var(--wh);border-radius:var(--r);border:2px dashed var(--bd)}
+.wish-empty i{font-size:80px;color:var(--bd);display:block;margin-bottom:24px}
+.wish-empty h3{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--dk);margin-bottom:12px}
+.wish-empty p{font-size:15px;color:var(--gr);margin-bottom:28px;max-width:400px;margin-left:auto;margin-right:auto}
+.wish-empty-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;background:linear-gradient(135deg,var(--pr),var(--prd));color:#fff;border-radius:12px;font-size:15px;font-weight:700;transition:var(--tr);box-shadow:0 4px 14px rgba(255,135,22,.3)}
+.wish-empty-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,135,22,.4)}
+
+.wish-card{background:var(--wh);border-radius:var(--r);overflow:hidden;border:1.5px solid var(--bd);transition:var(--tr);position:relative;display:flex;flex-direction:column}
+.wish-card:hover{transform:translateY(-6px);box-shadow:var(--sh3);border-color:rgba(255,135,22,.25)}
+.wish-img-wrap{position:relative;height:200px;background:#f9f9fc;overflow:hidden;cursor:pointer}
+.wish-img-wrap img{width:100%;height:100%;object-fit:contain;padding:14px;transition:transform .5s ease}
+.wish-card:hover .wish-img-wrap img{transform:scale(1.07)}
+.wish-badge{position:absolute;top:10px;left:10px;font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;z-index:2}
+.badge-sale{background:#ef4444;color:#fff}
+.badge-new{background:var(--green);color:#fff}
+.badge-hot{background:var(--pr);color:#fff}
+.wish-remove{position:absolute;top:10px;right:10px;width:34px;height:34px;background:var(--wh);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--red);box-shadow:var(--sh1);transition:var(--tr);cursor:pointer;border:1.5px solid var(--bd);z-index:3}
+.wish-remove:hover{background:#fff5f5;border-color:var(--red);transform:scale(1.12)}
+.wish-body{padding:16px 16px 18px;flex:1;display:flex;flex-direction:column}
+.wish-cat-tag{font-size:11px;font-weight:700;color:var(--pr);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.wish-name{font-size:14px;font-weight:700;color:var(--dk);line-height:1.4;margin-bottom:9px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;transition:color .2s}
+.wish-card:hover .wish-name{color:var(--pr)}
+.wish-stars{display:flex;align-items:center;gap:5px;margin-bottom:10px}
+.stars{display:flex;gap:2px}
+.stars i{font-size:11px;color:#fbbf24}
+.wish-reviews{font-size:11.5px;color:var(--gr)}
+.wish-price-row{display:flex;align-items:center;gap:9px;margin-bottom:14px;flex-wrap:wrap}
+.wish-price{font-size:20px;font-weight:800;color:var(--pr)}
+.wish-old{font-size:14px;color:#bbb;text-decoration:line-through;font-weight:500}
+.wish-discount{background:rgba(239,68,68,.1);color:#ef4444;font-size:11px;font-weight:800;padding:3px 8px;border-radius:8px}
+.wish-stock{font-size:12px;color:var(--gr);display:flex;align-items:center;gap:5px;margin-bottom:10px}
+.wish-stock i{font-size:10px}
+.in-stock{color:var(--green)}
+.low-stock{color:#f59e0b}
+.out-stock{color:var(--red)}
+.wish-add-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;background:linear-gradient(135deg,var(--pr),var(--prd));color:#fff;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer;transition:var(--tr);border:none;width:100%;margin-top:auto}
+.wish-add-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,135,22,.38)}
+.wish-add-btn.in-cart{background:var(--green)}
+.wish-add-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dk);color:#fff;padding:14px 22px;border-radius:12px;font-size:14px;font-weight:600;z-index:10000;transition:transform .3s,opacity .3s;opacity:0;display:flex;align-items:center;gap:10px;white-space:nowrap;box-shadow:var(--sh3)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast i{color:var(--pr);font-size:16px}
+
+/* ── FOOTER ── */
+.site-footer{background:#0f0f12;color:#9ca3af;margin-top:0}
+.f-nl{background:linear-gradient(135deg,var(--pr) 0%,var(--prd) 100%);padding:48px 0}
+.f-nl-inner{display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap}
+.f-nl-text h3{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:5px}
+.f-nl-text p{color:rgba(255,255,255,.82);font-size:14px}
+.f-nl-form{display:flex;gap:10px;flex:1;max-width:420px}
+.f-nl-form input{flex:1;padding:13px 18px;border-radius:10px;border:none;font-size:14px;outline:none;font-family:inherit}
+.f-nl-form button{padding:13px 22px;background:#0f0f12;color:#fff;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;transition:var(--tr);white-space:nowrap;border:none}
+.f-nl-form button:hover{background:#1c1c22}
+.f-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.4fr;gap:48px;padding:60px 0 40px}
+.fc h4{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;margin-bottom:18px;padding-bottom:9px;border-bottom:2px solid rgba(255,135,22,.35);display:inline-block}
+.fc-about{color:#6b7280;font-size:13.5px;line-height:1.85;margin-bottom:18px}
+.f-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,135,22,.14);color:var(--pr);padding:9px 14px;border-radius:9px;font-size:12.5px;font-weight:700;border:1px solid rgba(255,135,22,.22)}
+.f-links{list-style:none;display:flex;flex-direction:column;gap:9px}
+.f-links li a{display:flex;align-items:center;gap:8px;color:#6b7280;font-size:13.5px;transition:var(--tr)}
+.f-links li a i{color:var(--pr);width:13px;font-size:11px}
+.f-links li a:hover{color:var(--pr);padding-left:4px}
+.f-contact{display:flex;flex-direction:column;gap:13px;margin-bottom:22px}
+.f-ci{display:flex;align-items:center;gap:11px}
+.f-ci-ic{width:34px;height:34px;background:rgba(255,135,22,.14);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--pr);font-size:13px;flex-shrink:0}
+.f-ci-tx small{font-size:10.5px;color:#4b5563;text-transform:uppercase;letter-spacing:.5px;display:block}
+.f-ci-tx a{color:#9ca3af;font-size:13px;font-weight:500;transition:color .2s}
+.f-ci-tx a:hover{color:var(--pr)}
+.f-soc h5{font-size:12px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.8px;margin-bottom:11px}
+.f-soc-icons{display:flex;gap:8px}
+.f-soc-icons a{width:35px;height:35px;background:rgba(255,255,255,.07);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:14px;transition:var(--tr)}
+.f-soc-icons a:hover{background:var(--pr);color:#fff;transform:translateY(-2px)}
+.f-bot{background:rgba(0,0,0,.45);padding:18px 0;border-top:1px solid rgba(255,255,255,.05)}
+.f-bot-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.f-copy{color:#4b5563;font-size:13px}
+.f-legal{display:flex;gap:14px;margin-top:4px}
+.f-legal a{color:#4b5563;font-size:12px;transition:color .2s}
+.f-legal a:hover{color:var(--pr)}
+.f-pay{display:flex;gap:10px;font-size:27px;color:#374151}
+.f-pay i:hover{color:var(--pr)}
+.wa-btn{position:fixed;bottom:26px;right:26px;width:54px;height:54px;background:#25d366;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 6px 22px rgba(37,211,102,.5);z-index:999;animation:bumpWA 3s ease-in-out infinite;transition:transform .2s}
+.wa-btn:hover{transform:scale(1.12)!important}
+@keyframes bumpWA{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){.wish-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.wish-grid{grid-template-columns:repeat(2,1fr)}.f-grid{grid-template-columns:1fr 1fr;gap:32px}}
+@media(max-width:700px){.h-top-grid{grid-template-columns:auto auto}.h-srch-wrap{display:none}.h-auth{display:none}.hbg{display:flex}.h-nav{display:none}.page-header h1{font-size:32px}.wish-toolbar{flex-direction:column;align-items:stretch}.wish-actions{justify-content:stretch}.wish-btn{flex:1;justify-content:center}.f-grid{grid-template-columns:1fr;gap:28px}.f-nl-inner{flex-direction:column;text-align:center}.f-nl-form{max-width:100%}}
+@media(max-width:480px){.container{padding:0 16px}.wish-grid{grid-column:1fr;gap:14px}}
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCE BAR -->
+<div class="ann-bar">
+  <div class="container">
+    <div class="ann-scroll">
+      <span class="ann-item"><i class="fas fa-bolt"></i> Soldes jusqu'à <b>-50%</b> !</span>
+      <span class="ann-item"><i class="fas fa-truck"></i> Livraison gratuite dès <b>300 DH</b></span>
+      <span class="ann-item"><i class="fas fa-phone"></i> <a href="tel:+212774011555">+212 774 011 555</a></span>
+      <span class="ann-item"><i class="fas fa-shield-alt"></i> Paiement <b>100% Sécurisé</b></span>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="siteHeader">
+  <div class="h-top">
+    <div class="container h-top-grid">
+      <a href="index.html" class="h-logo">
+        <div class="h-logo-text">
+          <span class="h-logo-name">KLIKOO<span style="color:var(--pr)">.</span></span>
+          <span class="h-logo-tagline">Shopping Store</span>
+        </div>
+      </a>
+      <div class="h-srch-wrap">
+        <div class="h-srch">
+          <input type="search" placeholder="Rechercher un produit...">
+          <button class="h-srch-btn"><i class="fas fa-search"></i> Rechercher</button>
+        </div>
+      </div>
+      <div class="h-actions">
+        <a href="wishlist.html" class="h-icon-btn active" title="Liste de souhaits">
+          <i class="fa-solid fa-heart"></i>
+          <span class="h-badge" id="wishBadge">0</span>
+        </a>
+        <a href="index.html" class="h-icon-btn" title="Panier">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="h-badge" id="cartBadge">0</span>
+        </a>
+        <div class="h-auth" id="authButtons">
+          <a href="login.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+          <a href="signup.html" class="btn-signup"><i class="fas fa-user-plus"></i> Inscription</a>
+        </div>
+        <div class="user-menu" id="userMenu" style="display:none">
+          <button class="user-btn" onclick="toggleUserDropdown()">
+            <i class="fas fa-user-circle"></i>
+            <span id="userName">Utilisateur</span>
+            <i class="fas fa-chevron-down" style="font-size:10px"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdown">
+            <div class="user-dropdown-header">
+              <strong id="userFullName">Nom Utilisateur</strong>
+              <span id="userEmail">email@example.com</span>
+            </div>
+            <div class="user-dropdown-item" onclick="window.location.href='#'"><i class="fas fa-user"></i> Mon profil</div>
+            <div class="user-dropdown-item" onclick="window.location.href='#'"><i class="fas fa-box"></i> Mes commandes</div>
+            <div class="user-dropdown-item" onclick="window.location.href='wishlist.html'"><i class="fas fa-heart"></i> Ma liste de souhaits</div>
+            <div class="user-dropdown-divider"></div>
+            <div class="user-dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</div>
+          </div>
+        </div>
+        <button class="hbg" onclick="toggleMob()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </div>
+  <nav class="h-nav">
+    <div class="container nav-inner">
+      <ul class="nav-ul">
+        <li><a href="index.html"><i class="fas fa-home"></i> Accueil</a></li>
+        <li><a href="about.html"><i class="fas fa-info-circle"></i> À Propos</a></li>
+        <li><a href="blog.html"><i class="fas fa-newspaper"></i> Blog</a></li>
+        <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="mob-menu" id="mobMenu">
+    <ul class="mob-ul">
+      <li><a href="index.html"><i class="fas fa-home"></i> Accueil</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> À Propos</a></li>
+      <li><a href="blog.html"><i class="fas fa-newspaper"></i> Blog</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+    <div class="mob-auth-row" id="mobAuthButtons">
+      <a href="login.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+      <a href="signup.html" class="btn-signup"><i class="fas fa-user-plus"></i> Inscription</a>
+    </div>
+    <div id="mobUserMenu" style="display:none">
+      <div class="mob-ul">
+        <li><a href="#"><i class="fas fa-user"></i> Mon profil</a></li>
+        <li><a href="#"><i class="fas fa-box"></i> Mes commandes</a></li>
+        <li class="act"><a href="wishlist.html"><i class="fas fa-heart"></i> Ma liste</a></li>
+        <li><a href="#" onclick="logout();return false"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <div class="container page-header-content">
+    <h1><i class="fas fa-heart"></i>Ma Liste de Souhaits</h1>
+    <p>Tous vos produits préférés en un seul endroit</p>
+    <div class="breadcrumb">
+      <a href="index.html">Accueil</a>
+      <span>/</span>
+      <strong>Liste de souhaits</strong>
+    </div>
+  </div>
+</section>
+
+<!-- WISHLIST SECTION -->
+<section class="wishlist-section">
+  <div class="container">
+    <div class="wish-toolbar">
+      <div class="wish-count">
+        <span id="wishCountNum">0</span> produit(s) dans votre liste
+      </div>
+      <div class="wish-actions">
+        <button class="wish-btn" onclick="addAllToCart()">
+          <i class="fas fa-cart-plus"></i> Tout ajouter au panier
+        </button>
+        <button class="wish-btn danger" onclick="clearWishlist()">
+          <i class="fas fa-trash"></i> Vider la liste
+        </button>
+      </div>
+    </div>
+    <div class="wish-grid" id="wishGrid"></div>
+  </div>
+</section>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg"></span></div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="f-nl">
+    <div class="container f-nl-inner">
+      <div class="f-nl-text"><h3>📧 Restez Informé !</h3><p>Recevez nos offres exclusives et nouveautés</p></div>
+      <div class="f-nl-form">
+        <input type="email" placeholder="Votre adresse email...">
+        <button onclick="showToast('✅ Merci pour votre inscription !')">S'abonner</button>
+      </div>
+    </div>
+  </div>
+  <div class="container f-grid">
+    <div class="fc">
+      <h4>KLIKOO Store</h4>
+      <p class="fc-about">Votre destination shopping de confiance pour des produits de qualité à prix compétitifs.</p>
+      <div class="f-badge"><i class="fas fa-shipping-fast"></i> Livraison dans tout le Maroc</div>
+    </div>
+    <div class="fc">
+      <h4>Navigation</h4>
+      <ul class="f-links">
+        <li><a href="index.html"><i class="fas fa-home"></i> Accueil</a></li>
+        <li><a href="about.html"><i class="fas fa-info-circle"></i> À Propos</a></li>
+        <li><a href="blog.html"><i class="fas fa-blog"></i> Blog</a></li>
+        <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h4>Service Client</h4>
+      <ul class="f-links">
+        <li><a href="wishlist.html"><i class="fas fa-heart"></i> Ma Liste</a></li>
+        <li><a href="#"><i class="fas fa-truck"></i> Suivi commande</a></li>
+        <li><a href="#"><i class="fas fa-undo"></i> Retours</a></li>
+        <li><a href="#"><i class="fas fa-question-circle"></i> FAQ</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h4>Contactez-nous</h4>
+      <div class="f-contact">
+        <div class="f-ci"><div class="f-ci-ic"><i class="fas fa-phone"></i></div><div class="f-ci-tx"><small>Téléphone</small><a href="tel:+212774011555">+212 774 011 555</a></div></div>
+        <div class="f-ci"><div class="f-ci-ic"><i class="fas fa-envelope"></i></div><div class="f-ci-tx"><small>Email</small><a href="mailto:contact@klikoo.ma">contact@klikoo.ma</a></div></div>
+        <div class="f-ci"><div class="f-ci-ic"><i class="fas fa-map-marker-alt"></i></div><div class="f-ci-tx"><small>Adresse</small><a>Casablanca, Maroc</a></div></div>
+        <div class="f-ci"><div class="f-ci-ic"><i class="fas fa-clock"></i></div><div class="f-ci-tx"><small>Horaires</small><a>Lun–Sam : 9h–18h</a></div></div>
+      </div>
+      <div class="f-soc">
+        <h5>Suivez-nous</h5>
+        <div class="f-soc-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="https://wa.me/212774011555" target="_blank"><i class="fab fa-whatsapp"></i></a>
+          <a href="#"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="f-bot">
+    <div class="container f-bot-inner">
+      <div>
+        <div class="f-copy">© 2026 KLIKOO Store. Tous droits réservés.</div>
+        <div class="f-legal"><a href="#">Confidentialité</a><a href="#">Mentions légales</a><a href="#">Cookies</a></div>
+      </div>
+      <div class="f-pay"><i class="fas fa-credit-card"></i><i class="fab fa-cc-visa"></i><i class="fab fa-cc-mastercard"></i><i class="fas fa-money-bill-wave"></i></div>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/212774011555" class="wa-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CORRECTION PRINCIPALE : Lecture de TOUTES les clés
+// possibles pour la wishlist et le panier, puis
+// normalisation sur une seule clé unifiée.
+// ═══════════════════════════════════════════════════════
+
+// Clés unifiées (identiques à index.html)
+const WISH_KEY = 'klikoo_wish';
+const CART_KEY = 'klikoo_cart';
+
+// Migration automatique : récupère la wishlist depuis
+// toutes les clés possibles utilisées dans le projet
+function loadWishlist() {
+  // Essaie les différentes clés possibles
+  const keys = ['klikoo_wish', 'kliko_wish', 'kliko_wishlist', 'klikoo_wishlist'];
+  let merged = [];
+  keys.forEach(k => {
+    try {
+      const data = JSON.parse(localStorage.getItem(k) || '[]');
+      if (Array.isArray(data) && data.length > 0) {
+        data.forEach(id => { if (!merged.includes(id)) merged.push(id); });
+      }
+    } catch(e) {}
+  });
+  // Sauvegarde sur la clé unifiée
+  localStorage.setItem(WISH_KEY, JSON.stringify(merged));
+  return merged;
+}
+
+// Migration automatique pour le panier
+function loadCart() {
+  const keys = ['klikoo_cart', 'kliko_cart'];
+  let merged = [];
+  keys.forEach(k => {
+    try {
+      const data = JSON.parse(localStorage.getItem(k) || '[]');
+      if (Array.isArray(data) && data.length > 0) {
+        data.forEach(item => {
+          const ex = merged.find(c => c.id === item.id);
+          if (ex) {
+            ex.quantity = Math.max(ex.quantity || ex.qty || 1, item.quantity || item.qty || 1);
+          } else {
+            merged.push({
+              id: item.id,
+              quantity: item.quantity || item.qty || 1,
+              name: item.name,
+              price: item.price,
+              img: item.img
+            });
+          }
+        });
+      }
+    } catch(e) {}
+  });
+  return merged;
+}
+
+// ── PRODUITS (liste complète du site) ──
+const PRODUCTS = [
+  { id:1, name:"Pèse-Bagage Électronique 50kg/10g — Écran LCD", description:["Balance portable jusqu'à 50 kg","Précision 10 grammes","Écran LCD rétroéclairé"], price:80, oldPrice:130, stock:25, category:"Électronique", rating:4.5, reviews:128, badge:"sale", images:["https://res.cloudinary.com/djagllief/image/upload/v1769956215/1_ixcfwq.jpg","https://res.cloudinary.com/djagllief/image/upload/v1769956964/2_tah9be.jpg"] },
+  { id:2, name:"Thermomètre & Hygromètre Intelligent", description:["Capteur température et humidité","Affichage numérique précis","Design compact discret"], price:99, oldPrice:145, stock:20, category:"Électronique", rating:4.3, reviews:95, badge:"new", images:["https://res.cloudinary.com/djagllief/image/upload/v1769957522/1_y9c0qx.jpg","https://res.cloudinary.com/djagllief/image/upload/v1769957523/2_ddz3tx.webp"] },
+  { id:3, name:"Balance de Cuisine SF-400A — 10kg/1g", description:["Capacité 10 kg, précision 1g","Plateau acier inoxydable","Écran LCD rétroéclairé"], price:79, oldPrice:130, stock:40, category:"Électronique", rating:4.6, reviews:203, badge:"hot", images:["https://res.cloudinary.com/djagllief/image/upload/v1769598003/1_lmwgvu.jpg","https://res.cloudinary.com/djagllief/image/upload/v1769598003/2_v33eza.jpg"] },
+  { id:4, name:"Pèse-Personne GRAPHIK — Verre Trempé 8mm", description:["Verre trempé ultra-résistant 8mm","Capacité 180 kg","Grand écran LCD"], price:199, oldPrice:450, stock:20, category:"Électronique", rating:4.7, reviews:167, badge:"sale", images:["https://res.cloudinary.com/djagllief/image/upload/v1769958428/1_iwydj3.jpg","https://res.cloudinary.com/djagllief/image/upload/v1769958414/2_tvwyt4.jpg"] },
+  { id:5, name:"Balance Bluetooth Smart Life — 17 Fonctions", description:["17 mesures corporelles via Bluetooth","Analyse masse grasse, musculaire, osseuse"], price:199, oldPrice:300, stock:25, category:"Électronique", rating:4.8, reviews:189, badge:"hot", images:["https://res.cloudinary.com/djagllief/image/upload/v1769958752/1_h5pvdz.jpg","https://res.cloudinary.com/djagllief/image/upload/v1769598603/2_ufim5b.jpg"] },
+  { id:6, name:"Serrure Intelligente RFID Invisible", description:["Technologie RFID sans clé","Installation discrète"], price:129, oldPrice:399, stock:21, category:"Électronique", rating:4.4, reviews:76, badge:"new", images:["https://res.cloudinary.com/djagllief/image/upload/v1769958979/1_lsweek.jpg","https://res.cloudinary.com/djagllief/image/upload/v1769598977/4_d3a2fu.jpg"] },
+  { id:7, name:"Balance de Cuisine Lamacom 5kg", description:["Capacité 5 kg haute précision","Écran LCD rétroéclairé"], price:99, oldPrice:199, stock:30, category:"Électronique", rating:4.5, reviews:142, badge:"sale", images:["https://res.cloudinary.com/djagllief/image/upload/v1769959462/1_ivywi4.jpg","https://res.cloudinary.com/djagllief/image/upload/v1769959463/2_a0hfdj.jpg"] },
+  { id:8, name:"Mini Balance de Poche 200g/0.01g", description:["Précision 0,01 gramme","Capacité 200g","Ultra-portable"], price:99, oldPrice:145, stock:40, category:"Électronique", rating:4.6, reviews:98, badge:"hot", images:["https://res.cloudinary.com/djagllief/image/upload/v1769959749/1_qusxjv.jpg","https://res.cloudinary.com/djagllief/image/upload/v1769599790/2_egqpow.jpg"] },
+  { id:9, name:"Tablette d'Écriture LCD 12 Pouces", description:["Réutilisable à l'infini","Écran sensible à la pression"], price:79, oldPrice:null, stock:30, category:"Électronique", rating:4.4, reviews:112, badge:"new", images:["https://res.cloudinary.com/djagllief/image/upload/v1769960101/1_opfhve.jpg","https://res.cloudinary.com/djagllief/image/upload/v1769600214/2_xr6sqj.jpg"] },
+  { id:10, name:"Pèse-Personne LINEA — Verre Trempé 8mm", description:["Design LINEA verre trempé 8mm","Capacité 180 kg précis"], price:245, oldPrice:450, stock:19, category:"Électronique", rating:4.7, reviews:134, badge:"hot", images:["https://res.cloudinary.com/djagllief/image/upload/v1769600869/1_gtchdv.jpg","https://res.cloudinary.com/djagllief/image/upload/v1769600869/2_sbqloo.jpg"] },
+  { id:11, name:"Montre Homme Élégante — Cuir Véritable", description:["Bracelet cuir véritable premium","Mouvement quartz qualité"], price:450, oldPrice:750, stock:22, category:"Hommes", rating:4.6, reviews:98, badge:"sale", images:["https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=500"] },
+  { id:12, name:"Portefeuille Cuir Homme Slim", description:["Cuir véritable souple","Multiple compartiments"], price:199, oldPrice:299, stock:35, category:"Hommes", rating:4.7, reviews:145, badge:"new", images:["https://images.unsplash.com/photo-1627123424574-724758594e93?w=500"] },
+  { id:13, name:"Ceinture Cuir Homme — Boucle Dorée", description:["Cuir véritable tannage végétal","Boucle dorée élégante"], price:149, oldPrice:249, stock:28, category:"Hommes", rating:4.5, reviews:87, badge:"hot", images:["https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=500"] },
+  { id:14, name:"Sac à Main Femme Luxe", description:["Similicuir de qualité supérieure","Plusieurs compartiments pratiques"], price:349, oldPrice:599, stock:18, category:"Femmes", rating:4.8, reviews:203, badge:"hot", images:["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500"] },
+  { id:15, name:"Écharpe Femme Premium", description:["Tissu doux et chaud","Design moderne et coloré"], price:129, oldPrice:199, stock:45, category:"Femmes", rating:4.5, reviews:87, badge:"sale", images:["https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=500"] },
+  { id:16, name:"Lunettes de Soleil Femme UV400", description:["Protection UV400 certifiée","Monture légère résistante"], price:179, oldPrice:289, stock:32, category:"Femmes", rating:4.6, reviews:124, badge:"new", images:["https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500"] },
+  { id:17, name:"Cartable Scolaire Ergonomique", description:["Bretelles rembourrées ergonomiques","Plusieurs poches organisées"], price:249, oldPrice:399, stock:28, category:"Enfants", rating:4.7, reviews:165, badge:"new", images:["https://images.unsplash.com/photo-1577741314755-048d8525d31e?w=500"] },
+  { id:18, name:"Puzzle Éducatif 100 Pièces Animaux", description:["Développe logique et concentration","Thème animaux colorés"], price:79, oldPrice:129, stock:56, category:"Enfants", rating:4.6, reviews:112, badge:"hot", images:["https://images.unsplash.com/photo-1587760762563-e9cf9b5e04d7?w=500"] },
+  { id:19, name:"Kit Peinture Enfant 24 Couleurs", description:["24 peintures acryliques non toxiques","Pinceaux et toiles inclus"], price:99, oldPrice:159, stock:42, category:"Enfants", rating:4.5, reviews:78, badge:"sale", images:["https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=500"] },
+  { id:20, name:"Tapis de Yoga Antidérapant Premium", description:["Surface antidérapante haute qualité","Épaisseur 6mm confort optimal"], price:169, oldPrice:259, stock:34, category:"Sport", rating:4.8, reviews:189, badge:"sale", images:["https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500"] },
+  { id:21, name:"Haltères Réglables 20kg — Set Complet", description:["Poids ajustables 5 à 20 kg","Idéal musculation domicile"], price:499, oldPrice:799, stock:12, category:"Sport", rating:4.7, reviews:134, badge:"hot", images:["https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500"] },
+  { id:22, name:"Corde à Sauter Professionnelle", description:["Câble acier léger et résistant","Poignées ergonomiques"], price:89, oldPrice:149, stock:65, category:"Sport", rating:4.5, reviews:203, badge:"new", images:["https://images.unsplash.com/photo-1598289431512-b97b0917affc?w=500"] },
+  { id:23, name:"Kit Maquillage Professionnel Complet", description:["Palettes d'ombres variées","Pinceaux de qualité"], price:299, oldPrice:499, stock:25, category:"Beauté", rating:4.9, reviews:278, badge:"hot", images:["https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500"] },
+  { id:24, name:"Crème Visage Anti-Âge Premium", description:["Vitamines A, C, E","Hydratation intense 24h"], price:189, oldPrice:299, stock:42, category:"Beauté", rating:4.6, reviews:156, badge:"sale", images:["https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500"] },
+  { id:25, name:"Sérum Visage à l'Huile d'Argan", description:["Huile d'argan bio 100% pure","Nourrissant et régénérant"], price:149, oldPrice:229, stock:38, category:"Beauté", rating:4.7, reviews:192, badge:"new", images:["https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500"] },
+  { id:26, name:"Thermomètre Infrarouge Sans Contact", description:["Mesure instantanée en 1 seconde","Précision médicale certifiée"], price:149, oldPrice:249, stock:42, category:"Santé", rating:4.8, reviews:156, badge:"hot", images:["https://images.unsplash.com/photo-1584515933487-779824d29309?w=500"] },
+  { id:27, name:"Tensiomètre Électronique Bras", description:["Mesure tension et pulsations","Mémoire 90 mesures"], price:279, oldPrice:449, stock:18, category:"Santé", rating:4.7, reviews:134, badge:"sale", images:["https://images.unsplash.com/photo-1559757175-5700dde675bc?w=500"] },
+  { id:28, name:"Oxymètre de Pouls Digital", description:["Mesure SpO2 saturation oxygène","Affichage OLED lumineux"], price:99, oldPrice:169, stock:55, category:"Santé", rating:4.6, reviews:218, badge:"new", images:["https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500"] },
+  { id:29, name:"Collier Pendentif Cœur — Argent 925", description:["Argent 925 anti-allergique","Pendentif cœur avec zircone"], price:299, oldPrice:499, stock:15, category:"Bijoux", rating:4.9, reviews:167, badge:"hot", images:["https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500"] },
+  { id:30, name:"Bracelet Femme Plaqué Or 18K", description:["Plaqué or 18 carats premium","Design délicat et raffiné"], price:199, oldPrice:329, stock:22, category:"Bijoux", rating:4.7, reviews:143, badge:"sale", images:["https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500"] },
+  { id:31, name:"Balance Bijoux Haute Précision 0.01g", description:["Précision 0,01g pour or et argent","Calibration automatique"], price:159, oldPrice:249, stock:19, category:"Bijoux", rating:4.7, reviews:142, badge:"new", images:["https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500"] },
+  { id:32, name:"Sac à Dos Ordinateur Imperméable", description:["Compartiment laptop 15.6\" rembourré","Port USB intégré"], price:279, oldPrice:449, stock:31, category:"Sacs", rating:4.7, reviews:198, badge:"sale", images:["https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500"] },
+  { id:33, name:"Sac de Voyage Grande Capacité 50L", description:["50 litres de capacité","Matériau résistant et léger"], price:399, oldPrice:649, stock:15, category:"Sacs", rating:4.8, reviews:156, badge:"hot", images:["https://images.unsplash.com/photo-1547949003-9792a18a2601?w=500"] },
+  { id:34, name:"Sac Bandoulière Cuir Vegan", description:["Cuir vegan haute qualité","Bandoulière réglable"], price:229, oldPrice:369, stock:26, category:"Sacs", rating:4.6, reviews:112, badge:"new", images:["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500"] },
+  { id:35, name:"Drone Caméra HD 1080P", description:["Caméra HD 1080p stabilisée","Contrôle par smartphone"], price:599, oldPrice:999, stock:18, category:"Jouets", rating:4.6, reviews:143, badge:"hot", images:["https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=500"] },
+  { id:36, name:"Robot Éducatif Programmable", description:["Apprentissage programmation","Commande vocale et télécommande"], price:449, oldPrice:699, stock:22, category:"Jouets", rating:4.8, reviews:187, badge:"new", images:["https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=500"] },
+  { id:37, name:"Voiture Télécommandée 4x4 Tout-Terrain", description:["Suspension 4x4 tout-terrain","Vitesse 25 km/h"], price:299, oldPrice:499, stock:30, category:"Jouets", rating:4.5, reviews:165, badge:"sale", images:["https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=500"] },
+  { id:38, name:"Radio Coranique Rechargeable — 4 Récitants", description:["Coran complet intégré","Quatre récitants célèbres au choix"], price:110, oldPrice:199, stock:25, category:"Audio", rating:4.7, reviews:156, badge:"sale", images:["https://res.cloudinary.com/djagllief/image/upload/v1769961891/1_jjobqc.jpg","https://res.cloudinary.com/djagllief/image/upload/v1769600452/2_npa6cz.jpg"] },
+  { id:39, name:"Enceinte Bluetooth Portable 20W", description:["Son 360° puissant 20W","Waterproof IPX5"], price:349, oldPrice:599, stock:24, category:"Audio", rating:4.8, reviews:267, badge:"hot", images:["https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500"] },
+  { id:40, name:"Écouteurs TWS — Réduction de Bruit ANC", description:["Réduction active du bruit ANC","Autonomie 30h avec boîtier"], price:249, oldPrice:399, stock:38, category:"Audio", rating:4.6, reviews:312, badge:"new", images:["https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500"] }
+];
+
+// ── STATE (avec migration automatique) ──
+let wishlist = loadWishlist();
+let cart     = loadCart();
+let currentUser = null;
+
+// ── SESSION ──
+function checkSession() {
+  const keys = ['klikoo_session', 'kliko_session'];
+  let sessionData = null;
+  for (const k of keys) {
+    sessionData = localStorage.getItem(k) || sessionStorage.getItem(k);
+    if (sessionData) break;
+  }
+  if (sessionData) {
+    try {
+      currentUser = JSON.parse(sessionData);
+      document.getElementById('authButtons').style.display = 'none';
+      document.getElementById('userMenu').style.display = 'block';
+      document.getElementById('userName').textContent = currentUser.prenom || 'Compte';
+      document.getElementById('userFullName').textContent = `${currentUser.prenom} ${currentUser.nom}`;
+      document.getElementById('userEmail').textContent = currentUser.email;
+      document.getElementById('mobAuthButtons').style.display = 'none';
+      document.getElementById('mobUserMenu').style.display = 'block';
+    } catch(e) {}
+  }
+}
+function toggleUserDropdown() { document.getElementById('userDropdown').classList.toggle('show'); }
+function logout() {
+  if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+    ['klikoo_session','kliko_session'].forEach(k => { localStorage.removeItem(k); sessionStorage.removeItem(k); });
+    showToast('👋 À bientôt !');
+    setTimeout(() => location.reload(), 1200);
+  }
+}
+document.addEventListener('click', e => {
+  const um = document.getElementById('userMenu'), dd = document.getElementById('userDropdown');
+  if (um && dd && !um.contains(e.target)) dd.classList.remove('show');
+});
+
+// ── UTILS ──
+function saveCart() {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  // Nettoyage des anciennes clés
+  localStorage.removeItem('kliko_cart');
+  updateBadges();
+}
+function saveWishlist() {
+  localStorage.setItem(WISH_KEY, JSON.stringify(wishlist));
+  // Nettoyage des anciennes clés
+  localStorage.removeItem('kliko_wish');
+  localStorage.removeItem('kliko_wishlist');
+  localStorage.removeItem('klikoo_wishlist');
+  updateBadges();
+  renderWishlist();
+}
+function showToast(msg) {
+  const t = document.getElementById('toast'), sp = document.getElementById('toastMsg');
+  if (!t || !sp) return;
+  sp.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function renderStars(r) {
+  return [1,2,3,4,5].map(i => {
+    if (r >= i) return '<i class="fas fa-star"></i>';
+    if (r >= i - 0.5) return '<i class="fas fa-star-half-stroke"></i>';
+    return '<i class="far fa-star"></i>';
+  }).join('');
+}
+function updateBadges() {
+  const cc = cart.reduce((s, c) => s + (c.quantity || c.qty || 1), 0);
+  const cb = document.getElementById('cartBadge'), wb = document.getElementById('wishBadge');
+  if (cb) { cb.textContent = cc; cb.classList.toggle('show', cc > 0); }
+  if (wb) { wb.textContent = wishlist.length; wb.classList.toggle('show', wishlist.length > 0); }
+  const cn = document.getElementById('wishCountNum');
+  if (cn) cn.textContent = wishlist.length;
+}
+
+// ── WISHLIST ACTIONS ──
+function removeFromWishlist(id) {
+  const idx = wishlist.indexOf(id);
+  if (idx !== -1) { wishlist.splice(idx, 1); saveWishlist(); showToast('💔 Retiré de la liste de souhaits'); }
+}
+function addToCart(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  const ex = cart.find(c => c.id === id);
+  if (ex) { ex.quantity = (ex.quantity || 1) + 1; }
+  else { cart.push({ id, quantity: 1, name: p.name, price: p.price, img: p.images[0] }); }
+  saveCart();
+  renderWishlist(); // Re-render pour mettre à jour le bouton "Ajouté"
+  showToast(`✅ ${p.name.substring(0, 35)}... ajouté au panier`);
+}
+function addAllToCart() {
+  if (!wishlist.length) { showToast('⚠️ Votre liste de souhaits est vide'); return; }
+  let count = 0;
+  wishlist.forEach(id => {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (p) {
+      const ex = cart.find(c => c.id === id);
+      if (ex) { ex.quantity = (ex.quantity || 1) + 1; }
+      else { cart.push({ id, quantity: 1, name: p.name, price: p.price, img: p.images[0] }); }
+      count++;
+    }
+  });
+  saveCart();
+  renderWishlist();
+  showToast(`✅ ${count} produit(s) ajouté(s) au panier`);
+}
+function clearWishlist() {
+  if (!wishlist.length) { showToast('⚠️ Votre liste est déjà vide'); return; }
+  if (confirm(`Voulez-vous vraiment supprimer les ${wishlist.length} produits de votre liste ?`)) {
+    wishlist = [];
+    saveWishlist();
+    showToast('🗑️ Liste de souhaits vidée');
+  }
+}
+function toggleMob() { document.getElementById('mobMenu').classList.toggle('open'); }
+
+// ── RENDER WISHLIST ──
+function renderWishlist() {
+  const grid = document.getElementById('wishGrid');
+  if (!grid) return;
+
+  if (!wishlist.length) {
+    grid.innerHTML = `
+      <div class="wish-empty">
+        <i class="fas fa-heart-crack"></i>
+        <h3>Votre liste de souhaits est vide</h3>
+        <p>Ajoutez des produits à votre liste pour les retrouver facilement plus tard</p>
+        <a href="index.html" class="wish-empty-btn">
+          <i class="fas fa-shopping-bag"></i> Découvrir nos produits
+        </a>
+      </div>`;
+    updateBadges();
+    return;
+  }
+
+  const wishProducts = PRODUCTS.filter(p => wishlist.includes(p.id));
+
+  grid.innerHTML = wishProducts.map(p => {
+    const inCart = cart.some(c => c.id === p.id);
+    const stars = renderStars(p.rating);
+
+    // Badge
+    let bl = '';
+    if (p.badge === 'sale' && p.oldPrice) bl = `-${Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100)}%`;
+    else if (p.badge === 'new') bl = 'Nouveau';
+    else if (p.badge === 'hot') bl = '🔥 Top';
+    const bHTML = p.badge ? `<span class="wish-badge badge-${p.badge}">${bl}</span>` : '';
+
+    // Stock
+    let stockHTML = '';
+    if (p.stock > 5) stockHTML = `<div class="wish-stock in-stock"><i class="fas fa-circle"></i> En stock</div>`;
+    else if (p.stock > 0) stockHTML = `<div class="wish-stock low-stock"><i class="fas fa-circle"></i> Plus que ${p.stock} !</div>`;
+    else stockHTML = `<div class="wish-stock out-stock"><i class="fas fa-circle"></i> Rupture de stock</div>`;
+
+    // Prix
+    const discountPct = p.oldPrice ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) : 0;
+
+    return `
+      <div class="wish-card">
+        <div class="wish-img-wrap" onclick="window.location.href='index.html'">
+          <img src="${p.images[0]}" alt="${p.name}" loading="lazy"
+               onerror="this.src='https://via.placeholder.com/300x200/ff8716/fff?text=KLIKO'">
+          ${bHTML}
+          <button class="wish-remove" onclick="event.stopPropagation();removeFromWishlist(${p.id})" title="Retirer">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="wish-body">
+          <div class="wish-cat-tag">${p.category}</div>
+          <div class="wish-name" onclick="window.location.href='index.html'">${p.name}</div>
+          <div class="wish-stars">
+            <div class="stars">${stars}</div>
+            <span class="wish-reviews">(${p.reviews})</span>
+          </div>
+          ${stockHTML}
+          <div class="wish-price-row">
+            <span class="wish-price">${p.price} DH</span>
+            ${p.oldPrice ? `<span class="wish-old">${p.oldPrice} DH</span>` : ''}
+            ${discountPct ? `<span class="wish-discount">-${discountPct}%</span>` : ''}
+          </div>
+          <button class="wish-add-btn${inCart ? ' in-cart' : ''}"
+                  onclick="addToCart(${p.id})"
+                  ${p.stock === 0 ? 'disabled' : ''}>
+            <i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i>
+            ${p.stock === 0 ? 'Rupture de stock' : (inCart ? 'Ajouté au panier' : 'Ajouter au panier')}
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+
+  updateBadges();
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  checkSession();
+  updateBadges();
+  renderWishlist();
+  window.addEventListener('scroll', () => {
+    document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 8);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — KLIKOO Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ═══════════════════════════════
+   ROOT & RESET
+═══════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --pr:#ff8716;--prd:#e06500;--prl:#fff4ea;--prs:rgba(255,135,22,.12);
+  --dk:#0f0f12;--dk2:#1c1c22;--mid:#4a4a5a;
+  --gr:#7a7a8c;--bd:#e8e8f0;--li:#f5f5f8;--wh:#fff;
+  --green:#10b981;--red:#ef4444;--blue:#3b82f6;
+  --sh1:0 2px 8px rgba(0,0,0,.06);
+  --sh2:0 8px 28px rgba(0,0,0,.10);
+  --sh3:0 20px 60px rgba(0,0,0,.16);
+  --r:14px;--tr:all .26s cubic-bezier(.4,0,.2,1)
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:var(--dk);background:var(--li);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+img{max-width:100%;height:auto;display:block}
+.container{max-width:1260px;margin:0 auto;padding:0 24px}
+
+/* ═══════════════════════════════
+   ANNOUNCE BAR
+═══════════════════════════════ */
+.ann-bar{background:linear-gradient(90deg,#0f0f12 0%,#1c1c22 50%,#0f0f12 100%);padding:9px 0;overflow:hidden;position:relative;z-index:1100}
+.ann-scroll{display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
+.ann-item{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:#b0b0c0;white-space:nowrap}
+.ann-item i{color:var(--pr);font-size:11px}
+.ann-item b{color:var(--wh)}
+.ann-item a{color:#fbbf24;font-weight:700}
+
+/* ═══════════════════════════════
+   HEADER
+═══════════════════════════════ */
+.site-header{background:var(--wh);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:1000;transition:box-shadow .3s}
+.site-header.scrolled{box-shadow:0 4px 20px rgba(0,0,0,.10)}
+.h-top{padding:14px 0}
+.h-top-grid{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px}
+.h-logo{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.h-logo-text{display:flex;flex-direction:column;line-height:1}
+.h-logo-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:900;color:var(--dk);letter-spacing:-.5px}
+.h-logo-tagline{font-size:10px;font-weight:600;color:var(--gr);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.h-srch-wrap{max-width:580px;width:100%;justify-self:center}
+.h-srch{display:flex;align-items:center;background:var(--li);border:2px solid var(--bd);border-radius:50px;overflow:hidden;transition:var(--tr)}
+.h-srch:focus-within{border-color:var(--pr);background:var(--wh);box-shadow:0 0 0 4px var(--prs)}
+.h-srch input{flex:1;border:none;background:transparent;padding:12px 20px;font-size:14px;font-family:inherit;color:var(--dk);outline:none}
+.h-srch input::placeholder{color:#aaa}
+.h-srch-btn{background:var(--pr);color:var(--wh);padding:12px 22px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .2s;white-space:nowrap;border:none}
+.h-srch-btn:hover{background:var(--prd)}
+.h-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.h-icon-btn{position:relative;width:44px;height:44px;background:var(--li);border:1.5px solid var(--bd);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--dk);font-size:17px;transition:var(--tr);cursor:pointer}
+.h-icon-btn:hover{background:var(--prl);border-color:rgba(255,135,22,.3);color:var(--pr);transform:translateY(-1px)}
+.h-badge{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;font-size:9px;font-weight:800;padding:2px 5px;border-radius:12px;min-width:17px;text-align:center;line-height:1.3;display:none}
+.h-badge.show{display:block}
+.h-auth{display:flex;gap:8px;margin-left:4px}
+.btn-login{display:flex;align-items:center;gap:7px;padding:10px 18px;border:2px solid var(--bd);border-radius:10px;font-size:13px;font-weight:600;color:var(--dk);background:var(--wh);transition:var(--tr);white-space:nowrap}
+.btn-login:hover{border-color:var(--pr);color:var(--pr);background:var(--prl)}
+.btn-signup{display:flex;align-items:center;gap:7px;padding:10px 18px;background:linear-gradient(135deg,var(--pr),var(--prd));color:#fff;border-radius:10px;font-size:13px;font-weight:700;transition:var(--tr);white-space:nowrap;box-shadow:0 4px 14px rgba(255,135,22,.3)}
+.btn-signup:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,135,22,.4)}
+.hbg{display:none;flex-direction:column;gap:5px;padding:10px;background:var(--li);border:1.5px solid var(--bd);border-radius:10px}
+.hbg span{width:22px;height:2.5px;background:var(--dk);border-radius:2px;display:block;transition:var(--tr)}
+.hbg:hover span{background:var(--pr)}
+/* nav */
+.h-nav{border-top:1px solid var(--bd)}
+.nav-inner{display:flex;align-items:center}
+.nav-ul{display:flex;list-style:none}
+.nav-ul li a{display:flex;align-items:center;gap:6px;padding:13px 18px;font-size:14px;font-weight:600;color:var(--gr);position:relative;transition:color .22s}
+.nav-ul li a::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%) scaleX(0);width:60%;height:3px;background:var(--pr);border-radius:2px 2px 0 0;transition:transform .22s}
+.nav-ul li a:hover,.nav-ul li.act a{color:var(--pr)}
+.nav-ul li.act a::after,.nav-ul li a:hover::after{transform:translateX(-50%) scaleX(1)}
+/* mobile menu */
+.mob-menu{display:none;background:var(--wh);border-top:1px solid var(--bd);padding:16px 24px}
+.mob-menu.open{display:block}
+.mob-ul{list-style:none;flex-direction:column;gap:4px;margin-bottom:14px;display:flex}
+.mob-ul li a{display:flex;align-items:center;gap:10px;padding:12px 15px;border-radius:9px;font-size:14px;font-weight:600;color:var(--gr);transition:var(--tr)}
+.mob-ul li a:hover,.mob-ul li.act a{color:var(--pr);background:var(--prl)}
+.mob-auth-row{display:flex;gap:10px}
+.mob-auth-row a{flex:1;justify-content:center}
+
+/* ═══════════════════════════════
+   HERO BANNER
+═══════════════════════════════ */
+.hero{background:linear-gradient(135deg,#0f0f12 0%,#1c1c22 45%,#3d1800 80%,#ff8716 100%);padding:80px 0 72px;position:relative;overflow:hidden}
+.hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:50px 50px;pointer-events:none}
+.hero-glow{position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,135,22,.2) 0%,transparent 70%);pointer-events:none}
+.hero-glow2{position:absolute;bottom:-80px;left:-60px;width:380px;height:380px;background:radial-gradient(circle,rgba(255,135,22,.1) 0%,transparent 70%);pointer-events:none}
+.hero-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,135,22,.18);border:1px solid rgba(255,135,22,.38);color:#fbbf24;padding:8px 18px;border-radius:50px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:22px}
+.hero-badge .pulse{width:7px;height:7px;background:var(--pr);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+.hero h1{font-family:'Syne',sans-serif;font-size:54px;font-weight:900;color:#fff;line-height:1.07;letter-spacing:-2px;margin-bottom:16px}
+.hero h1 span{color:var(--pr)}
+.hero-sub{font-size:17px;color:rgba(255,255,255,.65);line-height:1.75;margin-bottom:34px;max-width:580px}
+.hero-search{display:flex;width:100%;max-width:520px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:50px;overflow:hidden;backdrop-filter:blur(10px);transition:var(--tr);margin-bottom:40px}
+.hero-search:focus-within{border-color:var(--pr);background:rgba(255,255,255,.1)}
+.hero-search input{flex:1;border:none;background:transparent;padding:16px 24px;font-size:15px;color:var(--wh);font-family:inherit;outline:none}
+.hero-search input::placeholder{color:rgba(255,255,255,.4)}
+.hero-search button{background:var(--pr);color:var(--wh);border:none;padding:16px 28px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;transition:background .2s}
+.hero-search button:hover{background:var(--prd)}
+.hero-stats{display:flex;gap:40px;flex-wrap:wrap;justify-content:center}
+.hstat{display:flex;flex-direction:column;align-items:center;gap:4px}
+.hstat-n{font-family:'Syne',sans-serif;font-size:28px;font-weight:900;color:var(--pr)}
+.hstat-l{font-size:12px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+
+/* ═══════════════════════════════
+   CATEGORY TAB BAR
+═══════════════════════════════ */
+.cat-bar{background:var(--wh);border-bottom:1px solid var(--bd);padding:0;position:sticky;top:97px;z-index:100}
+.cat-bar-inner{display:flex;align-items:center;gap:0;overflow-x:auto;scrollbar-width:none}
+.cat-bar-inner::-webkit-scrollbar{display:none}
+.cat-tab{padding:16px 22px;font-size:13.5px;font-weight:700;color:var(--gr);white-space:nowrap;position:relative;transition:color .22s;flex-shrink:0;cursor:pointer;background:transparent}
+.cat-tab::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%) scaleX(0);width:80%;height:3px;background:var(--pr);border-radius:2px 2px 0 0;transition:transform .22s}
+.cat-tab:hover{color:var(--dk)}
+.cat-tab.on{color:var(--pr)}
+.cat-tab.on::after,.cat-tab:hover::after{transform:translateX(-50%) scaleX(1)}
+
+/* ═══════════════════════════════
+   BLOG LAYOUT
+═══════════════════════════════ */
+.blog-section{padding:52px 0 90px}
+.blog-wrap{display:grid;grid-template-columns:1fr 308px;gap:44px;align-items:start}
+
+/* SECTION HEADER */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.sec-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--dk)}
+.sec-count{font-size:13px;font-weight:700;color:var(--gr);background:var(--wh);padding:7px 15px;border-radius:20px;border:1.5px solid var(--bd)}
+
+/* ARTICLE GRID */
+.art-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+
+/* ARTICLE CARD */
+.acard{background:var(--wh);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh1);cursor:pointer;display:flex;flex-direction:column;border:1.5px solid var(--bd);transition:var(--tr)}
+.acard:hover{transform:translateY(-6px);box-shadow:var(--sh3);border-color:rgba(255,135,22,.25)}
+.acard.feat{grid-column:1/-1;flex-direction:row}
+.acard.feat .a-thumb{width:46%;height:auto;min-height:280px;flex-shrink:0}
+.acard.feat .a-body{padding:32px 28px}
+.acard.feat .a-title{font-size:21px;-webkit-line-clamp:3}
+.acard.feat .a-excerpt{-webkit-line-clamp:4}
+.a-thumb{position:relative;height:200px;overflow:hidden;flex-shrink:0;background:var(--li)}
+.a-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .55s ease}
+.acard:hover .a-thumb img{transform:scale(1.07)}
+.a-cat{position:absolute;top:12px;left:12px;background:var(--pr);color:#fff;font-size:10px;font-weight:800;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.6px}
+.a-date{position:absolute;top:12px;right:12px;background:rgba(10,10,15,.65);color:#fff;font-size:11px;font-weight:500;padding:4px 10px;border-radius:8px;backdrop-filter:blur(4px)}
+.a-body{padding:20px 20px 18px;flex:1;display:flex;flex-direction:column}
+.a-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--dk);line-height:1.38;margin-bottom:9px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;transition:color .2s}
+.acard:hover .a-title{color:var(--pr)}
+.a-excerpt{font-size:13.5px;color:var(--gr);line-height:1.7;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:1;margin-bottom:16px}
+.a-foot{display:flex;align-items:center;justify-content:space-between;padding-top:13px;border-top:1px solid var(--bd);margin-top:auto}
+.a-meta{display:flex;gap:12px;font-size:12px;color:var(--gr)}
+.a-meta span{display:flex;align-items:center;gap:4px}
+.a-meta i{color:var(--pr);font-size:10px}
+.a-read{font-size:12.5px;font-weight:700;color:var(--pr);display:flex;align-items:center;gap:5px;transition:gap .2s}
+.acard:hover .a-read{gap:9px}
+.no-res{grid-column:1/-1;text-align:center;padding:72px 20px;color:var(--gr)}
+.no-res i{font-size:56px;opacity:.18;display:block;margin-bottom:16px}
+.no-res h3{font-size:20px;font-weight:800;color:var(--dk);margin-bottom:7px}
+
+/* PAGINATION */
+.pages{display:flex;justify-content:center;gap:7px;margin-top:40px}
+.pgb{width:40px;height:40px;border-radius:10px;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--gr);background:var(--wh);border:1.5px solid var(--bd);transition:var(--tr);cursor:pointer}
+.pgb:hover,.pgb.on{background:var(--pr);color:#fff;border-color:var(--pr)}
+.pgb.dots{pointer-events:none;background:0;border:0}
+
+/* ═══════════════════════════════
+   SIDEBAR
+═══════════════════════════════ */
+.sidebar{display:flex;flex-direction:column;gap:22px;position:sticky;top:145px}
+.wg{background:var(--wh);border-radius:var(--r);padding:24px;border:1.5px solid var(--bd);box-shadow:var(--sh1)}
+.wg-title{font-family:'Syne',sans-serif;font-size:14.5px;font-weight:800;color:var(--dk);margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--pr);display:flex;align-items:center;gap:8px}
+.wg-title i{color:var(--pr)}
+.sb-cats{display:flex;flex-direction:column;gap:5px}
+.sb-cat{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--mid);text-align:left;border:1.5px solid transparent;transition:var(--tr);cursor:pointer;background:transparent}
+.sb-cat:hover,.sb-cat.on{background:var(--prl);color:var(--pr);border-color:rgba(255,135,22,.22)}
+.sb-num{background:var(--li);color:var(--gr);font-size:11px;font-weight:800;padding:3px 8px;border-radius:8px;transition:var(--tr)}
+.sb-cat.on .sb-num{background:var(--pr);color:#fff}
+.pop-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--bd);cursor:pointer;transition:var(--tr)}
+.pop-item:last-child{border:none;padding-bottom:0}
+.pop-item:hover{padding-left:5px}
+.pop-img{width:62px;height:62px;border-radius:9px;object-fit:cover;flex-shrink:0}
+.pop-ttl{font-size:12.5px;font-weight:700;color:var(--dk);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:5px;transition:color .2s}
+.pop-item:hover .pop-ttl{color:var(--pr)}
+.pop-meta{font-size:11px;color:var(--gr)}
+.tags-cloud{display:flex;flex-wrap:wrap;gap:7px}
+.tg{padding:6px 13px;background:var(--li);border-radius:20px;font-size:12px;font-weight:700;color:var(--gr);border:1.5px solid var(--bd);cursor:pointer;transition:var(--tr)}
+.tg:hover{background:var(--pr);color:#fff;border-color:var(--pr);transform:translateY(-1px)}
+.nl-form{display:flex;flex-direction:column;gap:9px}
+.nl-form input{padding:11px 15px;border:2px solid var(--bd);border-radius:9px;font-size:13.5px;font-family:inherit;outline:none;transition:var(--tr)}
+.nl-form input:focus{border-color:var(--pr)}
+.nl-form button{padding:12px;background:linear-gradient(135deg,var(--pr),var(--prd));color:#fff;border-radius:9px;font-weight:700;font-size:13.5px;transition:var(--tr);border:none;cursor:pointer}
+.nl-form button:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,135,22,.35)}
+
+/* ═══════════════════════════════
+   ARTICLE MODAL
+═══════════════════════════════ */
+.a-modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .28s,visibility .28s}
+.a-modal.on{opacity:1;visibility:visible}
+.m-ov{position:absolute;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);cursor:pointer}
+.m-panel{position:relative;background:var(--wh);border-radius:20px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.35);transform:scale(.9) translateY(28px);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.m-panel::-webkit-scrollbar{width:5px}
+.m-panel::-webkit-scrollbar-thumb{background:var(--pr);border-radius:3px}
+.a-modal.on .m-panel{transform:scale(1) translateY(0)}
+.m-close{position:absolute;top:16px;right:16px;z-index:3;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:var(--tr)}
+.m-close:hover{background:var(--pr);transform:rotate(90deg)}
+.m-cover{width:100%;height:340px;object-fit:cover;border-radius:20px 20px 0 0;display:block}
+.m-body{padding:34px 38px 44px}
+.m-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.m-cat-badge{background:var(--pr);color:#fff;font-size:10.5px;font-weight:800;padding:5px 13px;border-radius:20px;text-transform:uppercase;letter-spacing:.6px}
+.m-info{font-size:12.5px;color:var(--gr);display:flex;align-items:center;gap:5px}
+.m-info i{color:var(--pr)}
+.m-title{font-family:'Syne',sans-serif;font-size:27px;font-weight:900;color:var(--dk);line-height:1.22;margin-bottom:20px;letter-spacing:-.4px}
+.m-text p{font-size:15px;color:#444;line-height:1.9;margin-bottom:16px}
+.m-text h3{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--dk);margin:26px 0 11px}
+.m-text ul{padding-left:20px;margin-bottom:16px}
+.m-text ul li{font-size:15px;color:#444;line-height:1.85;margin-bottom:6px}
+.m-text .hl{background:linear-gradient(135deg,#fff4ea,#fde9ce);border-left:4px solid var(--pr);border-radius:0 10px 10px 0;padding:14px 18px;margin:22px 0;font-size:14.5px;color:var(--dk);font-style:italic}
+.m-tags{display:flex;flex-wrap:wrap;gap:7px;padding-top:22px;border-top:1px solid var(--bd);margin-top:24px}
+.m-tags strong{font-size:13px;color:var(--gr);margin-right:4px;align-self:center}
+.m-tag{padding:5px 12px;background:var(--li);border-radius:18px;font-size:12px;font-weight:700;color:var(--gr);border:1.5px solid var(--bd)}
+.m-share{display:flex;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap}
+.m-share strong{font-size:13px;font-weight:700;color:var(--dk)}
+.sh{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;cursor:pointer;transition:var(--tr)}
+.sh:hover{transform:translateY(-3px)}
+.sh-wa{background:#25d366}.sh-fb{background:#1877f2}.sh-tw{background:#1da1f2}.sh-cp{background:var(--gr)}
+
+/* ═══════════════════════════════
+   FOOTER
+═══════════════════════════════ */
+.site-footer{background:#0f0f12;color:#9ca3af;margin-top:0}
+.f-nl{background:linear-gradient(135deg,var(--pr) 0%,var(--prd) 100%);padding:48px 0}
+.f-nl-inner{display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap}
+.f-nl-text h3{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:5px}
+.f-nl-text p{color:rgba(255,255,255,.82);font-size:14px}
+.f-nl-form{display:flex;gap:10px;flex:1;max-width:420px}
+.f-nl-form input{flex:1;padding:13px 18px;border-radius:10px;border:none;font-size:14px;outline:none;font-family:inherit}
+.f-nl-form button{padding:13px 22px;background:#0f0f12;color:#fff;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;transition:var(--tr);white-space:nowrap;border:none}
+.f-nl-form button:hover{background:#1c1c22}
+.f-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.4fr;gap:48px;padding:60px 0 40px}
+.fc h4{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;margin-bottom:18px;padding-bottom:9px;border-bottom:2px solid rgba(255,135,22,.35);display:inline-block}
+.fc-about{color:#6b7280;font-size:13.5px;line-height:1.85;margin-bottom:18px}
+.f-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,135,22,.14);color:var(--pr);padding:9px 14px;border-radius:9px;font-size:12.5px;font-weight:700;border:1px solid rgba(255,135,22,.22)}
+.f-links{list-style:none;display:flex;flex-direction:column;gap:9px}
+.f-links li a{display:flex;align-items:center;gap:8px;color:#6b7280;font-size:13.5px;transition:var(--tr)}
+.f-links li a i{color:var(--pr);width:13px;font-size:11px}
+.f-links li a:hover{color:var(--pr);padding-left:4px}
+.f-contact{display:flex;flex-direction:column;gap:13px;margin-bottom:22px}
+.f-ci{display:flex;align-items:center;gap:11px}
+.f-ci-ic{width:34px;height:34px;background:rgba(255,135,22,.14);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--pr);font-size:13px;flex-shrink:0}
+.f-ci-tx small{font-size:10.5px;color:#4b5563;text-transform:uppercase;letter-spacing:.5px;display:block}
+.f-ci-tx a{color:#9ca3af;font-size:13px;font-weight:500;transition:color .2s}
+.f-ci-tx a:hover{color:var(--pr)}
+.f-soc h5{font-size:12px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.8px;margin-bottom:11px}
+.f-soc-icons{display:flex;gap:8px}
+.f-soc-icons a{width:35px;height:35px;background:rgba(255,255,255,.07);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:14px;transition:var(--tr)}
+.f-soc-icons a:hover{background:var(--pr);color:#fff;transform:translateY(-2px)}
+.f-bot{background:rgba(0,0,0,.45);padding:18px 0;border-top:1px solid rgba(255,255,255,.05)}
+.f-bot-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.f-copy{color:#4b5563;font-size:13px}
+.f-legal{display:flex;gap:14px;margin-top:4px}
+.f-legal a{color:#4b5563;font-size:12px;transition:color .2s}
+.f-legal a:hover{color:var(--pr)}
+.f-pay{display:flex;gap:10px;font-size:27px;color:#374151}
+.f-pay i:hover{color:var(--pr)}
+.wa-btn{position:fixed;bottom:26px;right:26px;width:54px;height:54px;background:#25d366;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 6px 22px rgba(37,211,102,.5);z-index:999;animation:bumpWA 3s ease-in-out infinite;transition:transform .2s}
+.wa-btn:hover{transform:scale(1.12)!important}
+@keyframes bumpWA{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ═══════════════════════════════
+   RESPONSIVE
+═══════════════════════════════ */
+@media(max-width:1024px){
+  .blog-wrap{grid-template-columns:1fr}
+  .sidebar{position:static;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .f-grid{grid-template-columns:1fr 1fr;gap:36px}
+}
+@media(max-width:900px){
+  .hero h1{font-size:40px}
+  .art-grid{grid-template-columns:1fr}
+  .acard.feat{flex-direction:column}
+  .acard.feat .a-thumb{width:100%;height:210px}
+  .sidebar{grid-template-columns:1fr}
+  .f-grid{grid-template-columns:1fr;gap:28px}
+  .f-nl-inner{flex-direction:column;text-align:center}
+  .f-nl-form{max-width:100%}
+}
+@media(max-width:700px){
+  .h-top-grid{grid-template-columns:auto auto}
+  .h-srch-wrap{display:none}
+  .h-auth{display:none}
+  .hbg{display:flex}
+  .h-nav{display:none}
+  .m-body{padding:22px 20px 30px}
+  .m-cover{height:210px}
+  .m-title{font-size:21px}
+  .cat-bar{top:78px}
+  .ann-scroll{gap:14px;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:0 16px;scrollbar-width:none}
+}
+@media(max-width:480px){
+  .container{padding:0 16px}
+  .hero{padding:56px 0 52px}
+  .hero h1{font-size:32px}
+  .hero-stats{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCE BAR -->
+<div class="ann-bar">
+  <div class="container">
+    <div class="ann-scroll">
+      <span class="ann-item"><i class="fas fa-bolt"></i> Soldes jusqu'à <b>-50%</b> !</span>
+      <span class="ann-item"><i class="fas fa-truck"></i> Livraison gratuite dès <b>300 DH</b></span>
+      <span class="ann-item"><i class="fas fa-phone"></i> <a href="tel:+212774011555">+212 774 011 555</a></span>
+      <span class="ann-item"><i class="fas fa-shield-alt"></i> Paiement <b>100% Sécurisé</b></span>
+      <span class="ann-item"><i class="fas fa-undo"></i> Retour sous <b>3 jours</b></span>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="siteHeader">
+  <div class="h-top">
+    <div class="container h-top-grid">
+      <a href="index.html" class="h-logo">
+        <div class="h-logo-text">
+          <span class="h-logo-name">KLIKOO<span style="color:var(--pr)">.</span></span>
+          <span class="h-logo-tagline">Shipping Store</span>
+        </div>
+      </a>
+      <div class="h-srch-wrap">
+        <div class="h-srch">
+          <input type="search" placeholder="Rechercher un produit...">
+          <button class="h-srch-btn"><i class="fas fa-search"></i> Rechercher</button>
+        </div>
+      </div>
+      <div class="h-actions">
+        <a href="wishlist.html" class="h-icon-btn">
+          <i class="fa-regular fa-heart"></i>
+          <span class="h-badge" id="wishBadge">0</span>
+        </a>
+        <button class="h-icon-btn">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="h-badge" id="cartBadge">0</span>
+        </button>
+        <div class="h-auth">
+          <a href="login.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+          <a href="signup.html" class="btn-signup"><i class="fas fa-user-plus"></i> Inscription</a>
+        </div>
+        <button class="hbg" onclick="toggleMob()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </div>
+  <nav class="h-nav">
+    <div class="container nav-inner">
+      <ul class="nav-ul">
+        <li><a href="index.html"><i class="fas fa-home"></i> Accueil</a></li>
+        <li><a href="about.html"><i class="fas fa-info-circle"></i> À Propos</a></li>
+        <li class="act"><a href="blog.html"><i class="fas fa-newspaper"></i> Blog</a></li>
+        <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="mob-menu" id="mobMenu">
+    <ul class="mob-ul">
+      <li><a href="index.html"><i class="fas fa-home"></i> Accueil</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> À Propos</a></li>
+      <li class="act"><a href="blog.html"><i class="fas fa-newspaper"></i> Blog</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+    <div class="mob-auth-row">
+      <a href="login.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+      <a href="signup.html" class="btn-signup"><i class="fas fa-user-plus"></i> Inscription</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="container hero-inner">
+    <div class="hero-badge"><span class="pulse"></span> Blog & Actualités</div>
+    <h1>Conseils &amp; <span>Tendances</span></h1>
+    <p class="hero-sub">Guides d'achat, astuces tech et tendances shopping au Maroc. Des conseils experts pour mieux choisir vos produits.</p>
+    <div class="hero-search">
+      <input type="text" id="heroSrch" placeholder="Rechercher un article, une catégorie…" oninput="doSearch()">
+      <button><i class="fas fa-search"></i> Rechercher</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">6</span><span class="hstat-l">Articles</span></div>
+      <div class="hstat"><span class="hstat-n">6</span><span class="hstat-l">Catégories</span></div>
+      <div class="hstat"><span class="hstat-n">5K+</span><span class="hstat-l">Lectures</span></div>
+      <div class="hstat"><span class="hstat-n">2026</span><span class="hstat-l">Année</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORY BAR -->
+<div class="cat-bar">
+  <div class="container">
+    <div class="cat-bar-inner" id="catBar"></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<section class="blog-section">
+  <div class="container">
+    <div class="blog-wrap">
+      <main>
+        <div class="sec-head">
+          <h2 class="sec-title" id="secTitle">Tous les articles</h2>
+          <span class="sec-count" id="secCount">6 articles</span>
+        </div>
+        <div class="art-grid" id="artGrid"></div>
+        <div class="pages" id="pages"></div>
+      </main>
+      <aside class="sidebar">
+        <div class="wg">
+          <h3 class="wg-title"><i class="fas fa-tags"></i> Catégories</h3>
+          <div class="sb-cats" id="sbCats"></div>
+        </div>
+        <div class="wg">
+          <h3 class="wg-title"><i class="fas fa-fire-flame-curved"></i> Populaires</h3>
+          <div id="sbPop"></div>
+        </div>
+        <div class="wg">
+          <h3 class="wg-title"><i class="fas fa-hashtag"></i> Tags</h3>
+          <div class="tags-cloud" id="sbTags"></div>
+        </div>
+        <div class="wg">
+          <h3 class="wg-title"><i class="fas fa-envelope"></i> Newsletter</h3>
+          <p style="font-size:13.5px;color:var(--gr);margin-bottom:14px;line-height:1.6">Recevez nos meilleurs articles chaque semaine.</p>
+          <form class="nl-form" onsubmit="nlSub(event)">
+            <input type="email" placeholder="votre@email.com" required>
+            <button type="submit"><i class="fas fa-paper-plane"></i> S'abonner</button>
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ARTICLE MODAL -->
+<div class="a-modal" id="artModal">
+  <div class="m-ov" onclick="closeMod()"></div>
+  <div class="m-panel">
+    <button class="m-close" onclick="closeMod()"><i class="fas fa-xmark"></i></button>
+    <img class="m-cover" id="mCover" src="" alt="">
+    <div class="m-body" id="mBody"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="f-nl">
+    <div class="container f-nl-inner">
+      <div class="f-nl-text">
+        <h3>📧 Restez Informé !</h3>
+        <p>Recevez nos offres exclusives et nouveautés</p>
+      </div>
+      <div class="f-nl-form">
+        <input type="email" placeholder="Votre adresse email...">
+        <button onclick="alert('✅ Merci pour votre inscription !')">S'abonner</button>
+      </div>
+    </div>
+  </div>
+  <div class="container f-grid">
+    <div class="fc">
+      <h4>KLIKOO Store</h4>
+      <p class="fc-about">Votre destination shopping de confiance pour des produits de qualité à prix compétitifs. La meilleure expérience d'achat en ligne au Maroc.</p>
+      <div class="f-badge"><i class="fas fa-shipping-fast"></i> Livraison dans tout le Maroc</div>
+    </div>
+    <div class="fc">
+      <h4>Navigation</h4>
+      <ul class="f-links">
+        <li><a href="index.html"><i class="fas fa-home"></i> Accueil</a></li>
+        <li><a href="about.html"><i class="fas fa-info-circle"></i> À Propos</a></li>
+        <li><a href="blog.html"><i class="fas fa-blog"></i> Blog</a></li>
+        <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h4>Service Client</h4>
+      <ul class="f-links">
+        <li><a href="wishlist.html"><i class="fas fa-heart"></i> Ma Liste</a></li>
+        <li><a href="#"><i class="fas fa-truck"></i> Suivi commande</a></li>
+        <li><a href="#"><i class="fas fa-undo"></i> Retours</a></li>
+        <li><a href="#"><i class="fas fa-question-circle"></i> FAQ</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h4>Contactez-nous</h4>
+      <div class="f-contact">
+        <div class="f-ci"><div class="f-ci-ic"><i class="fas fa-phone"></i></div><div class="f-ci-tx"><small>Téléphone</small><a href="tel:+212774011555">+212 774 011 555</a></div></div>
+        <div class="f-ci"><div class="f-ci-ic"><i class="fas fa-envelope"></i></div><div class="f-ci-tx"><small>Email</small><a href="mailto:contact@klikoo.ma">contact@klikoo.ma</a></div></div>
+        <div class="f-ci"><div class="f-ci-ic"><i class="fas fa-map-marker-alt"></i></div><div class="f-ci-tx"><small>Adresse</small><a>Casablanca, Maroc</a></div></div>
+        <div class="f-ci"><div class="f-ci-ic"><i class="fas fa-clock"></i></div><div class="f-ci-tx"><small>Horaires</small><a>Lun–Sam : 9h–18h</a></div></div>
+      </div>
+      <div class="f-soc">
+        <h5>Suivez-nous</h5>
+        <div class="f-soc-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="https://wa.me/212774011555"><i class="fab fa-whatsapp"></i></a>
+          <a href="#"><i class="fab fa-tiktok"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="f-bot">
+    <div class="container f-bot-inner">
+      <div>
+        <div class="f-copy">© 2026 KLIKOO Store. Tous droits réservés.</div>
+        <div class="f-legal"><a href="#">Confidentialité</a><a href="#">Mentions légales</a><a href="#">Cookies</a></div>
+      </div>
+      <div class="f-pay">
+        <i class="fas fa-credit-card"></i>
+        <i class="fab fa-cc-visa"></i>
+        <i class="fab fa-cc-mastercard"></i>
+        <i class="fas fa-money-bill-wave"></i>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/212774011555" class="wa-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+<script>
+/* DATA */
+const ARTS=[
+{id:1,title:"Les meilleurs smartphones de 2026 au Maroc",cat:"Smartphones",date:"15 Jan 2026",rt:"5 min",views:1240,
+img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80",
+exc:"Découvrez notre sélection des meilleurs smartphones disponibles au Maroc avec un excellent rapport qualité-prix. De Samsung à Xiaomi, on vous guide dans votre choix.",
+tags:["Smartphones","Samsung","Xiaomi","Tech"],
+body:`<p>Le marché des smartphones au Maroc évolue rapidement. En 2026, plusieurs modèles se distinguent par leurs performances, leur autonomie et leur rapport qualité-prix exceptionnel.</p>
+<h3>🏆 Les modèles incontournables</h3>
+<p>Cette année, les grandes marques proposent des appareils toujours plus performants à des prix accessibles.</p>
+<ul>
+  <li><strong>Samsung Galaxy A55</strong> — Écran AMOLED 120Hz, excellent appareil photo</li>
+  <li><strong>Xiaomi Redmi Note 14 Pro</strong> — Meilleur rapport qualité-prix du marché</li>
+  <li><strong>iPhone 15</strong> — Pour ceux qui veulent le meilleur de l'écosystème Apple</li>
+  <li><strong>Realme 13 Pro</strong> — Charge rapide 100W, autonomie exceptionnelle</li>
+</ul>
+<div class="hl">💡 Notre conseil : Pour un budget entre 1500 et 2500 DH, le Xiaomi Redmi Note 14 Pro offre le meilleur équilibre performance/prix.</div>
+<h3>📱 Comment bien choisir ?</h3>
+<p>Avant d'acheter, posez-vous les bonnes questions : usage quotidien ou gaming intensif ? Qualité photo prioritaire ou autonomie ? Consultez notre équipe sur WhatsApp pour des conseils personnalisés selon votre budget.</p>`},
+
+{id:2,title:"Guide complet : choisir son laptop en 2026",cat:"Informatique",date:"20 Jan 2026",rt:"7 min",views:980,
+img:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80",
+exc:"Processeur, RAM, stockage... Tous nos conseils pour choisir le laptop parfait selon vos besoins et votre budget. Guide complet pour étudiants et professionnels.",
+tags:["Laptop","PC","Guide","Informatique"],
+body:`<p>Choisir un laptop peut être complexe face aux centaines de modèles disponibles. Voici notre guide complet pour vous aider à faire le bon choix en 2026.</p>
+<h3>💻 Les critères essentiels</h3>
+<ul>
+  <li><strong>Processeur</strong> — Intel Core i5/i7 ou AMD Ryzen 5/7 pour de bonnes performances</li>
+  <li><strong>RAM</strong> — 8 Go minimum, 16 Go recommandé pour le multitâche</li>
+  <li><strong>Stockage</strong> — SSD 512 Go minimum pour une rapidité optimale</li>
+  <li><strong>Écran</strong> — Full HD (1920x1080) au minimum, panneau IPS pour les couleurs</li>
+  <li><strong>Autonomie</strong> — 8h+ pour une utilisation mobile confortable</li>
+</ul>
+<div class="hl">📚 Étudiant : Budget 3000-5000 DH — Lenovo IdeaPad ou Asus VivoBook offrent un excellent rapport qualité-prix.</div>
+<h3>🛒 Où acheter au Maroc ?</h3>
+<p>KLIKO Store propose une sélection de laptops reconditionnés et neufs aux meilleurs prix. Livraison sous 48h partout au Maroc avec garantie constructeur incluse.</p>`},
+
+{id:3,title:"Tendances mode hiver 2026 au Maroc",cat:"Mode",date:"10 Jan 2026",rt:"4 min",views:756,
+img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80",
+exc:"Découvrez les tendances mode incontournables de cet hiver : couleurs, matières et styles à adopter. Des looks adaptés au climat marocain.",
+tags:["Mode","Hiver","Tendances","Style"],
+body:`<p>L'hiver 2026 apporte avec lui des tendances mode adaptées au style de vie marocain. Entre élégance et confort, voici ce qui fait fureur cette saison.</p>
+<h3>🎨 Les couleurs de la saison</h3>
+<ul>
+  <li>Le <strong>camel</strong> — intemporel et élégant</li>
+  <li>Le <strong>bordeaux</strong> — chaleureux et sophistiqué</li>
+  <li>Le <strong>kaki</strong> — casual et polyvalent</li>
+  <li>Le <strong>noir</strong> — toujours classique</li>
+</ul>
+<div class="hl">✨ Tendance forte : Le layering (superposition de vêtements) est incontournable pour affronter les hivers de Fès ou Ifrane.</div>
+<h3>👗 Les pièces essentielles</h3>
+<p>Manteau oversize, pull en laine mérinos, sneakers chunky et sac tote bag grand format — ces pièces constitueront la base d'une garde-robe hiver réussie. Retrouvez toutes ces pièces dans notre collection Mode sur KLIKO Store.</p>`},
+
+{id:4,title:"Électroménager intelligent : innovations 2026",cat:"Maison",date:"5 Jan 2026",rt:"6 min",views:612,
+img:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80",
+exc:"Les dernières innovations en matière d'électroménager pour rendre votre maison plus intelligente et économe. Aspirateurs robots, frigos connectés et bien plus.",
+tags:["Maison","Smart Home","Électroménager"],
+body:`<p>La maison connectée n'est plus un luxe — elle devient accessible au plus grand nombre. Voici les innovations qui transforment nos foyers en 2026.</p>
+<h3>🤖 L'aspirateur robot</h3>
+<p>Les aspirateurs robots de nouvelle génération cartographient votre logement, évitent les obstacles et se rechargent automatiquement. Disponibles à partir de 2500 DH.</p>
+<div class="hl">💰 Bon plan : Un aspirateur robot vous fait économiser en moyenne 3h de ménage par semaine !</div>
+<h3>❄️ Les réfrigérateurs connectés</h3>
+<p>Les nouveaux frigos intelligents détectent les aliments périmés et vous alertent quand le stock est bas.</p>
+<h3>🌡️ La climatisation intelligente</h3>
+<p>Les climatiseurs inverter nouvelle génération réduisent la consommation d'énergie de 40% par rapport aux modèles classiques. Contrôle depuis votre smartphone, programmation horaire et mode eco automatique.</p>`},
+
+{id:5,title:"Setup gaming parfait : guide complet 2026",cat:"Gaming",date:"22 Jan 2026",rt:"8 min",views:1480,
+img:"https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=800&q=80",
+exc:"Comment créer le setup gaming parfait ? Nos recommandations pour PC, périphériques et accessoires. Du budget serré au setup ultime.",
+tags:["Gaming","PC","Setup","Accessoires"],
+body:`<p>Créer un setup gaming performant au Maroc est tout à fait possible, même avec un budget limité. Voici notre guide complet pour 2026.</p>
+<h3>🖥️ L'écran — priorité absolue</h3>
+<p>Pour le gaming, privilégiez un taux de rafraîchissement élevé (144Hz minimum) et un temps de réponse faible (1ms). Les écrans IPS offrent les meilleures couleurs.</p>
+<h3>🖱️ Les périphériques essentiels</h3>
+<ul>
+  <li><strong>Souris</strong> — Logitech G502 ou Razer DeathAdder pour la précision</li>
+  <li><strong>Clavier mécanique</strong> — Switches Red pour le gaming rapide</li>
+  <li><strong>Casque</strong> — Bon micro et son surround 7.1 virtuel</li>
+  <li><strong>Tapis grand format</strong> — Pour les mouvements amples</li>
+</ul>
+<div class="hl">🎮 Budget recommandé : 5000–8000 DH pour un setup complet et performant. KLIKO Store propose tous ces accessoires avec livraison rapide.</div>`},
+
+{id:6,title:"Comment bien choisir ses bijoux ? Conseils experts",cat:"Bijoux",date:"18 Jan 2026",rt:"5 min",views:534,
+img:"https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80",
+exc:"Conseils d'experts pour choisir des bijoux de qualité qui dureront toute une vie. Argent, or, acier... tout ce que vous devez savoir avant d'acheter.",
+tags:["Bijoux","Accessoires","Argent","Or"],
+body:`<p>Choisir des bijoux de qualité nécessite de connaître quelques bases. Voici tout ce que vous devez savoir pour faire les bons choix.</p>
+<h3>💎 Les matériaux</h3>
+<ul>
+  <li><strong>Or 18 carats</strong> — Le meilleur pour une durabilité maximale</li>
+  <li><strong>Argent 925</strong> — Belle brillance, prix accessible</li>
+  <li><strong>Acier inoxydable</strong> — Résistant, anti-allergie, idéal au quotidien</li>
+  <li><strong>Plaqué or</strong> — Économique mais nécessite un entretien régulier</li>
+</ul>
+<div class="hl">⚠️ Si vous avez une peau sensible, privilégiez l'acier chirurgical ou l'or pur pour éviter les réactions cutanées.</div>
+<h3>🔍 Comment reconnaître la qualité ?</h3>
+<p>Vérifiez toujours le poinçon (marque légale), le poids et les finitions. Rangez vos bijoux séparément pour éviter les rayures. Éloignez-les de l'eau de mer et des produits chimiques.</p>`}
+];
+
+const CATS=['Tous','Smartphones','Informatique','Mode','Maison','Gaming','Bijoux'];
+const PER=6;
+let selCat='Tous', srchTxt='', curPg=1;
+
+function getFiltered(){
+  return ARTS.filter(a=>{
+    const mc=selCat==='Tous'||a.cat===selCat;
+    const ms=!srchTxt||a.title.toLowerCase().includes(srchTxt.toLowerCase())||
+             a.tags.some(t=>t.toLowerCase().includes(srchTxt.toLowerCase()));
+    return mc&&ms;
+  });
+}
+
+function renderCatBar(){
+  document.getElementById('catBar').innerHTML=CATS.map(c=>
+    `<button class="cat-tab${c===selCat?' on':''}" onclick="setCat('${c}')">${c}</button>`
+  ).join('');
+}
+
+function renderSidebar(){
+  document.getElementById('sbCats').innerHTML=CATS.map(c=>{
+    const n=c==='Tous'?ARTS.length:ARTS.filter(a=>a.cat===c).length;
+    return`<button class="sb-cat${c===selCat?' on':''}" onclick="setCat('${c}')">${c}<span class="sb-num">${n}</span></button>`;
+  }).join('');
+  const pop=[...ARTS].sort((a,b)=>b.views-a.views).slice(0,4);
+  document.getElementById('sbPop').innerHTML=pop.map(a=>`
+    <div class="pop-item" onclick="openArt(${a.id})">
+      <img class="pop-img" src="${a.img}" alt="" onerror="this.src='https://via.placeholder.com/62x62/ff8716/fff?text=K'">
+      <div class="pop-info">
+        <div class="pop-ttl">${a.title}</div>
+        <div class="pop-meta"><i class="fas fa-clock" style="color:var(--pr);font-size:10px;margin-right:4px"></i>${a.date} · ${a.rt}</div>
+      </div>
+    </div>`).join('');
+  const tags=[...new Set(ARTS.flatMap(a=>a.tags))];
+  document.getElementById('sbTags').innerHTML=tags.map(t=>`<button class="tg" onclick="setTag('${t}')">${t}</button>`).join('');
+}
+
+function renderGrid(){
+  const f=getFiltered();
+  document.getElementById('secTitle').textContent=
+    selCat!=='Tous'?selCat:srchTxt?`"${srchTxt}"`:'Tous les articles';
+  document.getElementById('secCount').textContent=
+    `${f.length} article${f.length!==1?'s':''}`;
+  const pg=f.slice((curPg-1)*PER, curPg*PER);
+  const grid=document.getElementById('artGrid');
+  if(!pg.length){
+    grid.innerHTML=`<div class="no-res"><i class="fas fa-face-frown-open"></i><h3>Aucun article trouvé</h3><p>Essayez un autre mot-clé ou une autre catégorie.</p></div>`;
+    document.getElementById('pages').innerHTML='';return;
+  }
+  grid.innerHTML=pg.map((a,i)=>{
+    const feat=i===0&&curPg===1&&selCat==='Tous'&&!srchTxt;
+    return`<article class="acard${feat?' feat':''}" onclick="openArt(${a.id})">
+      <div class="a-thumb">
+        <img src="${a.img}" alt="${a.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/800x400/ff8716/fff?text=KLIKO'">
+        <span class="a-cat">${a.cat}</span>
+        <span class="a-date">${a.date}</span>
+      </div>
+      <div class="a-body">
+        <h2 class="a-title">${a.title}</h2>
+        <p class="a-excerpt">${a.exc}</p>
+        <div class="a-foot">
+          <div class="a-meta">
+            <span><i class="fas fa-clock"></i>${a.rt}</span>
+            <span><i class="fas fa-eye"></i>${a.views.toLocaleString()}</span>
+          </div>
+          <span class="a-read">Lire <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+  renderPages(f.length);
+}
+
+function renderPages(total){
+  const p=Math.ceil(total/PER);
+  if(p<=1){document.getElementById('pages').innerHTML='';return;}
+  let h='';
+  if(curPg>1)h+=`<button class="pgb" onclick="goPage(${curPg-1})"><i class="fas fa-chevron-left"></i></button>`;
+  for(let i=1;i<=p;i++){
+    if(i===1||i===p||Math.abs(i-curPg)<=1)
+      h+=`<button class="pgb${i===curPg?' on':''}" onclick="goPage(${i})">${i}</button>`;
+    else if(Math.abs(i-curPg)===2)h+=`<span class="pgb dots">…</span>`;
+  }
+  if(curPg<p)h+=`<button class="pgb" onclick="goPage(${curPg+1})"><i class="fas fa-chevron-right"></i></button>`;
+  document.getElementById('pages').innerHTML=h;
+}
+
+function setCat(c){
+  selCat=c;curPg=1;
+  renderCatBar();renderSidebar();renderGrid();
+  window.scrollTo({top:document.querySelector('.blog-section').offsetTop-140,behavior:'smooth'});
+}
+function doSearch(){
+  srchTxt=document.getElementById('heroSrch').value.trim();
+  selCat='Tous';curPg=1;
+  renderCatBar();renderSidebar();renderGrid();
+}
+function setTag(t){
+  document.getElementById('heroSrch').value=t;
+  srchTxt=t;selCat='Tous';curPg=1;
+  renderCatBar();renderGrid();
+  window.scrollTo({top:document.querySelector('.blog-section').offsetTop-140,behavior:'smooth'});
+}
+function goPage(p){curPg=p;renderGrid();window.scrollTo({top:0,behavior:'smooth'});}
+function nlSub(e){e.preventDefault();alert('✅ Merci ! Vous êtes bien abonné à notre newsletter.');e.target.reset();}
+function toggleMob(){document.getElementById('mobMenu').classList.toggle('open');}
+
+function openArt(id){
+  const a=ARTS.find(x=>x.id===id);if(!a)return;
+  document.getElementById('mCover').src=a.img;
+  document.getElementById('mCover').alt=a.title;
+  document.getElementById('mBody').innerHTML=`
+    <div class="m-meta">
+      <span class="m-cat-badge">${a.cat}</span>
+      <span class="m-info"><i class="fas fa-calendar"></i>${a.date}</span>
+      <span class="m-info"><i class="fas fa-clock"></i>${a.rt} de lecture</span>
+      <span class="m-info"><i class="fas fa-eye"></i>${a.views.toLocaleString()} vues</span>
+    </div>
+    <h1 class="m-title">${a.title}</h1>
+    <div class="m-text">${a.body}</div>
+    <div class="m-tags"><strong>Tags :</strong>${a.tags.map(t=>`<span class="m-tag">${t}</span>`).join('')}</div>
+    <div class="m-share">
+      <strong>Partager :</strong>
+      <button class="sh sh-wa" onclick="share('wa',${a.id})" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+      <button class="sh sh-fb" onclick="share('fb',${a.id})" title="Facebook"><i class="fab fa-facebook-f"></i></button>
+      <button class="sh sh-tw" onclick="share('tw',${a.id})" title="Twitter"><i class="fab fa-twitter"></i></button>
+      <button class="sh sh-cp" onclick="share('cp',${a.id})" title="Copier le lien"><i class="fas fa-link"></i></button>
+    </div>`;
+  document.getElementById('artModal').classList.add('on');
+  document.body.style.overflow='hidden';
+  a.views++;
+}
+function closeMod(){
+  document.getElementById('artModal').classList.remove('on');
+  document.body.style.overflow='';
+}
+function share(type,id){
+  const a=ARTS.find(x=>x.id===id);
+  const url=encodeURIComponent(location.href);
+  const txt=encodeURIComponent(a.title+' — KLIKO Store Blog');
+  if(type==='wa')window.open(`https://wa.me/?text=${txt}%20${url}`,'_blank');
+  else if(type==='fb')window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`,'_blank');
+  else if(type==='tw')window.open(`https://twitter.com/intent/tweet?text=${txt}&url=${url}`,'_blank');
+  else navigator.clipboard.writeText(location.href).then(()=>alert('✅ Lien copié !'));
+}
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('siteHeader').classList.toggle('scrolled',scrollY>5);
+});
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMod();});
+
+document.addEventListener('DOMContentLoaded',()=>{
+  renderCatBar();renderSidebar();renderGrid();
+});
+</script>
+</body>
+</html>

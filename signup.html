@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscription — KLIKOO Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--pr:#ff8716;--prd:#e06500;--prl:#fff4ea;--dk:#0f0f12;--gr:#7a7a8c;--bd:#e8e8f0;--wh:#fff;--red:#ef4444;--green:#10b981;--sh3:0 20px 60px rgba(0,0,0,.16);--tr:all .26s cubic-bezier(.4,0,.2,1)}
+html{scroll-behavior:smooth;height:100%}
+body{font-family:'DM Sans',sans-serif;color:var(--dk);background:linear-gradient(135deg,#ff8716 0%,#e06500 50%,#3d1800 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative}
+body::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;opacity:0.3}
+a{text-decoration:none;color:inherit}
+.auth-container{width:100%;max-width:520px;position:relative;z-index:1}
+.back-home{position:absolute;top:-60px;left:0;display:flex;align-items:center;gap:8px;color:#fff;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);padding:10px 20px;border-radius:25px;font-weight:600;font-size:14px;transition:var(--tr);border:1px solid rgba(255,255,255,.2)}
+.back-home:hover{background:rgba(255,255,255,.25);transform:translateX(-3px);border-color:rgba(255,255,255,.4)}
+.auth-box{background:var(--wh);border-radius:20px;box-shadow:var(--sh3);padding:50px 40px;position:relative}
+.auth-box::before{content:'';position:absolute;top:0;left:0;width:100%;height:5px;background:linear-gradient(90deg,var(--pr),var(--prd))}
+.auth-logo{text-align:center;margin-bottom:35px}
+.auth-logo h1{font-family:'Syne',sans-serif;font-size:32px;font-weight:900;color:var(--dk);margin-bottom:8px;letter-spacing:-0.5px}
+.auth-logo h1 span{color:var(--pr)}
+.auth-logo p{color:var(--gr);font-size:15px}
+.message{padding:14px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;display:none;align-items:center;gap:10px;animation:slideDown .3s ease}
+.message i{font-size:18px}
+.message.error{background:#fee;color:#c00;border:1px solid #fcc}
+.message.success{background:#efe;color:#060;border:1px solid #cfc}
+.message.show{display:flex}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.form-group{margin-bottom:18px;position:relative}
+.form-group label{display:block;margin-bottom:8px;font-weight:600;color:var(--dk);font-size:14px}
+.form-group label i{color:var(--pr);margin-right:8px;width:16px;text-align:center}
+.form-group input{width:100%;padding:13px 45px 13px 15px;border:2px solid var(--bd);border-radius:10px;font-size:15px;transition:var(--tr);font-family:inherit;color:var(--dk)}
+.form-group input:focus{border-color:var(--pr);outline:none;box-shadow:0 0 0 4px rgba(255,135,22,.1)}
+.toggle-password{position:absolute;right:15px;top:43px;cursor:pointer;color:var(--gr);font-size:18px;transition:color .2s;z-index:2}
+.toggle-password:hover{color:var(--pr)}
+.password-strength{margin-top:8px;display:flex;gap:5px;height:4px}
+.strength-bar{flex:1;background:var(--bd);border-radius:2px;transition:var(--tr)}
+.strength-bar.active-weak{background:#ff4444}
+.strength-bar.active-medium{background:var(--pr)}
+.strength-bar.active-strong{background:var(--green)}
+.strength-text{font-size:12px;margin-top:5px;font-weight:600}
+.strength-weak{color:#ff4444}
+.strength-medium{color:var(--pr)}
+.strength-strong{color:var(--green)}
+.terms-checkbox{display:flex;align-items:flex-start;gap:10px;margin-bottom:22px;font-size:14px}
+.terms-checkbox input{width:18px;height:18px;cursor:pointer;margin-top:2px;flex-shrink:0;accent-color:var(--pr)}
+.terms-checkbox a{color:var(--pr);font-weight:600}
+.submit-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--pr) 0%,var(--prd) 100%);color:#fff;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center;gap:10px;border:none}
+.submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 5px 20px rgba(255,135,22,.4)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed}
+.divider{text-align:center;margin:25px 0;position:relative}
+.divider::before{content:'';position:absolute;top:50%;left:0;width:100%;height:1px;background:var(--bd)}
+.divider span{background:var(--wh);padding:0 15px;position:relative;color:var(--gr);font-size:14px;font-weight:500}
+.auth-footer{text-align:center;margin-top:25px;padding-top:25px;border-top:1px solid var(--bd);font-size:14px;color:var(--gr)}
+.auth-footer a{color:var(--pr);font-weight:600;transition:color .2s}
+.auth-footer a:hover{color:var(--prd);text-decoration:underline}
+@media(max-width:480px){body{padding:10px}.auth-box{padding:40px 25px}.auth-logo h1{font-size:26px}.back-home{top:-50px;font-size:13px;padding:8px 16px}.form-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="auth-container">
+  <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i>Retour à l'accueil</a>
+  <div class="auth-box">
+    <div class="auth-logo">
+      <h1>KLIKOO<span>.</span></h1>
+      <p>Créer votre compte gratuitement</p>
+    </div>
+    <div class="message error" id="errorMsg"><i class="fas fa-exclamation-circle"></i><span id="errorText"></span></div>
+    <div class="message success" id="successMsg"><i class="fas fa-check-circle"></i><span id="successText"></span></div>
+    <form id="signupForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="prenom"><i class="fas fa-user"></i>Prénom *</label>
+          <input type="text" id="prenom" placeholder="Votre prénom" required maxlength="50" autocomplete="given-name">
+        </div>
+        <div class="form-group">
+          <label for="nom"><i class="fas fa-user"></i>Nom *</label>
+          <input type="text" id="nom" placeholder="Votre nom" required maxlength="50" autocomplete="family-name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email"><i class="fas fa-envelope"></i>Email *</label>
+        <input type="email" id="email" placeholder="votre@email.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="telephone"><i class="fas fa-phone"></i>Téléphone</label>
+        <input type="tel" id="telephone" placeholder="+212 6XX XXX XXX" pattern="(\+212|0)[5-7][0-9]{8}" autocomplete="tel">
+      </div>
+      <div class="form-group">
+        <label for="password"><i class="fas fa-lock"></i>Mot de passe *</label>
+        <input type="password" id="password" placeholder="••••••••" required minlength="6" autocomplete="new-password">
+        <i class="fas fa-eye toggle-password" id="togglePassword1"></i>
+        <div class="password-strength">
+          <div class="strength-bar" id="strength-1"></div>
+          <div class="strength-bar" id="strength-2"></div>
+          <div class="strength-bar" id="strength-3"></div>
+          <div class="strength-bar" id="strength-4"></div>
+        </div>
+        <div class="strength-text" id="strengthText"></div>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword"><i class="fas fa-lock"></i>Confirmer *</label>
+        <input type="password" id="confirmPassword" placeholder="••••••••" required minlength="6" autocomplete="new-password">
+        <i class="fas fa-eye toggle-password" id="togglePassword2"></i>
+      </div>
+      <div class="terms-checkbox">
+        <input type="checkbox" id="terms" required>
+        <label for="terms">J'accepte les <a href="#" onclick="event.preventDefault()">conditions</a> et la <a href="#" onclick="event.preventDefault()">politique de confidentialité</a></label>
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <i class="fas fa-user-plus"></i>Créer mon compte
+      </button>
+    </form>
+    <div class="divider"><span>OU</span></div>
+    <div class="auth-footer">Vous avez déjà un compte ? <a href="login.html">Connectez-vous</a></div>
+  </div>
+</div>
+
+<script>
+  console.log('📝 KLIKOO Signup');
+
+  const signupForm = document.getElementById('signupForm');
+  const prenomInput = document.getElementById('prenom');
+  const nomInput = document.getElementById('nom');
+  const emailInput = document.getElementById('email');
+  const telephoneInput = document.getElementById('telephone');
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirmPassword');
+  const termsCheckbox = document.getElementById('terms');
+  const togglePassword1 = document.getElementById('togglePassword1');
+  const togglePassword2 = document.getElementById('togglePassword2');
+  const submitBtn = document.getElementById('submitBtn');
+  const errorMsg = document.getElementById('errorMsg');
+  const errorText = document.getElementById('errorText');
+  const successMsg = document.getElementById('successMsg');
+  const successText = document.getElementById('successText');
+  const bars = [
+    document.getElementById('strength-1'),
+    document.getElementById('strength-2'),
+    document.getElementById('strength-3'),
+    document.getElementById('strength-4')
+  ];
+  const strengthText = document.getElementById('strengthText');
+
+  function showError(msg) {
+    successMsg.classList.remove('show');
+    errorText.textContent = msg;
+    errorMsg.classList.add('show');
+    setTimeout(() => errorMsg.classList.remove('show'), 5000);
+  }
+
+  function showSuccess(msg) {
+    errorMsg.classList.remove('show');
+    successText.textContent = msg;
+    successMsg.classList.add('show');
+  }
+
+  // Toggle password visibility
+  togglePassword1.addEventListener('click', function () {
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      togglePassword1.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+      passwordInput.type = 'password';
+      togglePassword1.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+  });
+
+  togglePassword2.addEventListener('click', function () {
+    if (confirmPasswordInput.type === 'password') {
+      confirmPasswordInput.type = 'text';
+      togglePassword2.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+      confirmPasswordInput.type = 'password';
+      togglePassword2.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+  });
+
+  // Password strength checker
+  function checkPasswordStrength() {
+    const password = passwordInput.value;
+    bars.forEach(bar => bar.className = 'strength-bar');
+    if (!password.length) { strengthText.textContent = ''; return; }
+
+    let strength = 0;
+    if (password.length >= 6) strength++;
+    if (password.length >= 10) strength++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+    strength = Math.min(Math.ceil(strength * 4 / 5), 4);
+
+    if (strength <= 1) {
+      bars[0].classList.add('active-weak');
+      strengthText.textContent = 'Faible';
+      strengthText.className = 'strength-text strength-weak';
+    } else if (strength === 2) {
+      bars[0].classList.add('active-medium');
+      bars[1].classList.add('active-medium');
+      strengthText.textContent = 'Moyen';
+      strengthText.className = 'strength-text strength-medium';
+    } else if (strength === 3) {
+      bars[0].classList.add('active-strong');
+      bars[1].classList.add('active-strong');
+      bars[2].classList.add('active-strong');
+      strengthText.textContent = 'Fort';
+      strengthText.className = 'strength-text strength-strong';
+    } else {
+      bars.forEach(bar => bar.classList.add('active-strong'));
+      strengthText.textContent = 'Très fort';
+      strengthText.className = 'strength-text strength-strong';
+    }
+  }
+
+  passwordInput.addEventListener('input', checkPasswordStrength);
+
+  // Form submission
+  signupForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const prenom = prenomInput.value.trim();
+    const nom = nomInput.value.trim();
+    const email = emailInput.value.trim();
+    const telephone = telephoneInput.value.trim();
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+    const terms = termsCheckbox.checked;
+
+    if (!prenom || !nom || !email || !password || !confirmPassword) {
+      showError('Veuillez remplir tous les champs obligatoires');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showError('Adresse email invalide');
+      return;
+    }
+    if (password.length < 6) {
+      showError('Mot de passe trop court (minimum 6 caractères)');
+      return;
+    }
+    if (password !== confirmPassword) {
+      showError('Les mots de passe ne correspondent pas');
+      return;
+    }
+    if (!terms) {
+      showError('Veuillez accepter les conditions d\'utilisation');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création en cours...';
+
+    const users = JSON.parse(localStorage.getItem('kliko_users') || '[]');
+
+    if (users.some(u => u.email === email)) {
+      showError('Cet email est déjà utilisé');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Créer mon compte';
+      return;
+    }
+
+    const newUser = {
+      id: Date.now(),
+      prenom: prenom,
+      nom: nom,
+      email: email,
+      telephone: telephone,
+      password: password,
+      createdAt: new Date().toISOString(),
+      lastLogin: null
+    };
+
+    users.push(newUser);
+    localStorage.setItem('kliko_users', JSON.stringify(users));
+    console.log('✅ Compte créé:', newUser.email);
+
+    // Créer la session
+    const session = {
+      id: newUser.id,
+      email: newUser.email,
+      nom: newUser.nom,
+      prenom: newUser.prenom,
+      loginTime: new Date().toISOString()
+    };
+    localStorage.setItem('klikoo_session', JSON.stringify(session));
+
+    showSuccess('Compte créé avec succès ! Redirection...');
+    setTimeout(() => window.location.href = 'index.html', 2000);
+  });
+
+  // ✅ BUG CORRIGÉ: Suppression du redirect automatique sur la page inscription
+  // Avant: si l'utilisateur était connecté, il était redirigé même sur cette page
+  // Maintenant: le redirect automatique est UNIQUEMENT dans login.html
+</script>
+</body>
+</html>
